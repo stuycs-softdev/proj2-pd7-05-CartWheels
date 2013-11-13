@@ -1,4 +1,4 @@
-proj2-pd7-05-GoCarts
-====================
+GoCarts
+=======
 
 Food cart tracking (hopefully)
