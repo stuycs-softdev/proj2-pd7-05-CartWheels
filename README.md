@@ -16,6 +16,11 @@ CartWheels
 ### Tags and photos
 - Users will be able to give certain tags to food carts, and attribute certain photos to them as well
 
+## Task delegation
+- *Noah* -- website design and web pages
+- *Vivian* -- middleware (app.py)
+- *Judy* -- middleware and web pages
+- *Ben* -- backend, js, and maps
 
 ## Uses
 - NYC Open Data
