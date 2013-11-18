@@ -9,16 +9,14 @@
 
 {% block body %}
 <div class=map-form>
-  <form action=# method=GET>
-    <select class=styled-select align=center id="key">
-      <option value=zip_code>Zip Code</option>
-      <option value=street>Street</option>
-      <option value=borough>Borough</option>
-      <option value=owner>Name</option>
-    </select>
+  <select class=styled-select align=center id="key">
+    <option value=zip_code>Zip Code</option>
+    <option value=street>Street</option>
+    <option value=borough>Borough</option>
+    <option value=owner>Name</option>
+  </select>
 
-    <input class=val align=center type=text id="val">
-  </form>
+  <input class=val align=center type=text id="val">
 </div>
 
 <div id="map-canvas"></div>
