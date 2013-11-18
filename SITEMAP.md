@@ -16,3 +16,5 @@
     - Ability to give reviews if logged in
     - Ability to tag
     - Ability to upload photos of the page
+
+* Tag page

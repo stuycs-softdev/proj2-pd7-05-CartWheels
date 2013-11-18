@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block head %}
+<title>CartWheels</title>
+<link rel=stylesheet type=text/css href="/static/css/maps.css">
+
+<script type=text/javascript
+  src="/static/js/cart-map.js"></script>
+{% endblock %}
+
+{% block body %}
+<div class=map-form>
+  <form action=# method=GET>
+    <select class=styled-select align=center id="key">
+      <option value=zip_code>Zip Code</option>
+      <option value=street>Street</option>
+      <option value=borough>Borough</option>
+      <option value=owner>Name</option>
+    </select>
+
+    <input class=val align=center type=text id="val">
+  </form>
+</div>
+
+<div id="map-canvas"></div>
+{% endblock %}
