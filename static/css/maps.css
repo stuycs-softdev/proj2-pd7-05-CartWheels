@@ -43,6 +43,7 @@ input:focus {
 #map-canvas {
   margin-right: auto;
   margin-left: auto;
+  border-radius: 10px;
   top: 25px;
   width: 80%;
   height: 70%;

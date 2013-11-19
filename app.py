@@ -14,11 +14,13 @@ api_key = f.readlines()[0].strip()
 f.close()
 
 
+# Base function, renders the template with the api key as input
 @app.route("/")
 def home():
     return render_template('index.html', API_KEY=api_key)
 
 
+# Serves the data from the backend to the frontend js using json module
 @app.route('/_data')
 def serve_data():
     rargs = request.args.copy()
