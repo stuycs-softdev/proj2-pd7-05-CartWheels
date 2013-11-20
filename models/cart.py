@@ -43,9 +43,9 @@ class CartModel(Model):
     # Add a tag
     def tag(self, label):
         tags = Tag()
-        t = tags.find_one(text=label)
+        t = tags.find_one(label=label)
         if t is None:
-            tags.insert(text=label)
+            tags.insert(label=label)
 
         if t.get_id() not in self.tags:
             t.add_cart(self.get_id())
