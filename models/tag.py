@@ -7,13 +7,15 @@ class TagModel(Model):
 
     def __init__(self, db, fs, collection, obj):
         super(TagModel, self).__init__(db, fs, collection, obj)
-        self.text = obj['text']
+        self.label = obj['label']
         self.carts = obj['carts']
 
     # Add a cart which has this tag
     def add_cart(self, cart_id):
         self.carts.append(cart_id)
         self.collection.update({'_id': self.get_id()}, carts=self.carts)
+
+    # Get carts by tag
 
 
 class Tag(Collection):
