@@ -31,24 +31,24 @@ def home():
     return render_template('index.html', API_KEY=api_key)
 
 
-# User page
+# Review page
 """Map for the user function for the GET method:
-    I. Grab the user from the database
-        - target_user = users.find_one(_id=uid)
-    II. Check if a user exists (use if target_user is not None) with the given id
+    I. Grab the review from the database
+        - target_rev = reviews.find_one(_id=uid)
+    II. Check if a review exists (use if target_review is not None) with the given id
         1) If it does...
             i. Check if the username is in session
                 - if it is...
                     * grab the user from the database
                         - u = users.find_one(username=session['username'])
-                    * render the template with the user and the target_user to the function 
-                        - render_template("index.html", ..., target_user=target_user, u=u)
+                    * render the template with the user and the target_review to the function 
+                        - render_template("index.html", ..., target_review=target_review, u=u)
                 - if it isn't
-                    * render the template with the target_user
-                        - render_template("index.html", ..., target_user=target_user, u=None)
+                    * render the template with the target_review
+                        - render_template("index.html", ..., target_review=target_review, u=None)
 TODO: Implement POST method"""
-@app.route("/users/<id>")
-def user(uid):
+@app.route("/reviews/<id>")
+def review(rid):
     pass
 
 
