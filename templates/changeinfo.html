@@ -1,0 +1,24 @@
+<h1>Account Settings</h1>
+
+<form method="POST">
+<h3>Please enter your current password to make any changes.</h3>
+Current password: <input type="password" name="oldpw"> 
+{% if error is defined %}
+<font color=red><sub>{{error}}</sub></font>
+{% endif %}
+<br>
+<br>
+<h3>Make your changes:</h3>
+
+Change username to: <input type="text" name="newuser"> <font color=red><sub>{{usererror}}</sub></font>
+<br>
+<input type="submit" name="button" value="Change Username">
+<br>
+<br>
+Change password to: <input type="password" name="newpw"> 
+<br>
+Verify new password: <input type="password" name="confirm"> <font color=red><sub>{{passerror}}</sub></font>
+<br>
+<input type="submit" name="button" value="Change Password">
+
+</form>
