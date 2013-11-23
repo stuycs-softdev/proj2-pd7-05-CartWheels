@@ -60,9 +60,8 @@ class Collection(object):
 
     # Inserts objects into collection
     def insert(self, **kwargs):
-        new_args = kwargs
-        new_args['date'] = datetime.now()
-        id = self.objects.insert(new_args)
+        kwargs['date'] = datetime.now()
+        id = self.objects.insert(kwargs)
         return self.find_one(_id=id)
 
     # Updates objects in the collection

@@ -10,7 +10,6 @@ class UserModel(Model):
         super(UserModel, self).__init__(db, fs, collection, obj)
         self.username = obj['username']
         self.password = obj['password']
-        self.reviews = Review()
 
     # Change password with authentication
     def change_password(self, oldpass, newpass):
@@ -30,7 +29,8 @@ class UserModel(Model):
 
     # Get blog reviews made by this user, and with other arguments
     def get_reviews(self, **kwargs):
-        return self.reviews.find(user=self.username, **kwargs)
+        reviews = Review()
+        return reviews.find(user=self.username, **kwargs)
 
 
 class User(Collection):
