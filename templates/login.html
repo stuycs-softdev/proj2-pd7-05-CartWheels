@@ -1,0 +1,24 @@
+<h1>Login!</h1>
+{% if error is defined %}
+<font color=red><sub>{{error}}</sub></font>
+{% endif %}
+<br>
+<form method="POST">
+<b>Username</b>
+<br>
+<input type="text" name="username">
+<br>
+<br>
+<b>Password</b>
+<br>
+<input type="password" name="password">
+<br>
+<br>
+<input type="submit" name="button" value="Sign in">
+
+</form>
+<br>
+<sub>Don't have an account? <a href="register.html">Register here!</a></sub>
+
+
+
