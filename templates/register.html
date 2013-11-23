@@ -1,0 +1,32 @@
+<html>
+  <h1>Register!</h1>
+  <h3>Please create a username and password.</h3>
+  <form method="POST">
+    <table class="table" style="border:1px solid rgb(221,221,221)">
+
+      <tr class="active">
+	<th>Username</th>
+	<td><input type="text" name="username"> <font color=red><sub>{{usererror}}</sub></font></td>
+      </tr>
+
+      <tr class="active">
+	<th>Password</th>
+	<td><input type="password" name="password"></td>
+      </tr>
+     
+      <tr>
+	<th>Verify Password</th>
+	<td><input type="password" name="confirm"> <font color=red><sub>{{passerror}}</sub></font></td>
+      </tr>
+
+      <tr class="active">
+	<td colspan="2" style="text-align:center">
+	  <input type="submit" name="button" value="Register">
+	  <input type="submit" name="button" value="Cancel">
+	</td>
+      </tr>
+
+    </table>
+  </form>
+  <sub>Already have an account? <a href="login.html">Login here!<a></sub>
+</html>
