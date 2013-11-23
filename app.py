@@ -30,11 +30,69 @@ TODO: render the template with a list of trending food carts, or reviews"""
 def home():
     return render_template('index.html', API_KEY=api_key)
 
+@app.route("/register",methods=['GET','POST'])
+def register():
+    if 'username' in session:
+        return redirect(url_for('home'))
+    if request.method == 'GET':
+        return render_template("register.html")
+    if users.exists(request.form['username']):  
+        return render_template("register.html",error="Username already exists")
+    if request.form['password'] != request.form['confirm']:
+        return render_template("register.html",error="Passwords do not match")
+    session['username'] = request.form['username']
+    users.insert(username=request.form['username'],password=request.form['password'])
+    return redirect(url_for("home"))
+
+@app.route("/login",methods=['GET','POST'])
+def login():
+    if 'username' in session:
+        return redirect(url_for('home'))
+    if request.method == 'GET':
+        return render_template("login.html")
+    u = users.find_one(username=request.form['username'], password=request.form['password'])
+    if u is None:
+        return render_template("login.html",error="Incorrect username or password")
+    session['username'] = request.form['username']
+    return redirect(url_for("home"))
+
+@app.route("/logout")
+def logout():
+	if 'username' in session:
+		session.pop('username')
+	return redirect(url_for('home'))
+
+@app.route("/changeinfo",methods=['GET','POST'])
+def changeinfo():
+    if 'username' not in session:
+        return redirect(url_for("home"))
+    if request.method == 'GET':
+        return render_template("changeinfo.html")
+    u = users.find_one(username=session['username'])
+    error = ""
+    usererror = ""
+    passerror = ""
+    a = u.password is not request.form['oldpw']
+    if a:
+        error = "Incorrect password."
+    if request.form['newuser'] is not "":
+        b = u.change_username(oldpass=request.form['oldpw'], newuser=request.form['newuser'])
+        if a and b:
+            usererror = "Username changed successfully."
+        if a and not b:
+            usererror = "Username change unsuccessful."
+    if request.form['newpw'] is not "":
+        c = u.change_password(oldpass=request.form['oldpw'], newpass=request.form['newpw'])
+        if a and c:
+            passerror = "Password changed successfully."
+        if a and not c:
+            passerror = "Password change unsuccessful."
+    return render_template("changeinfo.html",error=error,usererror=usererror,passerror=passerror)
 
 # Review page
 """Map for the user function for the GET method:
     I. Grab the review from the database
-        - target_rev = reviews.find_one(_id=uid)
+        - target_rev = reviews.find_one(_id=rid)
     II. Check if a review exists (use if target_review is not None) with the given id
         1) If it does...
             i. Check if the username is in session
