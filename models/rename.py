@@ -1,13 +1,13 @@
 # Models and Collections for name guesses
 from models.base import Collection, Model
 from models.cart import Cart
-from settings import NAME_GUESS_COLLECTION
+from settings import RENAME_COLLECTION
 
 
-class NameGuessModel(Model):
+class RenameModel(Model):
 
     def __init__(self, db, fs, collection, obj):
-        super(NameGuessModel, self).__init__(db, fs, collection, obj)
+        super(RenameModel, self).__init__(db, fs, collection, obj)
         self.name = obj['name']
         self.cart_id = obj['cart_id']
         self.count = obj['count']
@@ -22,10 +22,10 @@ class NameGuessModel(Model):
         self.collection.remove(cart_id=self.cart_id)
 
 
-class NameGuess(Collection):
+class Rename(Collection):
 
     def __init__(self):
-        super(NameGuess, self).__init__(NAME_GUESS_COLLECTION, NameGuessModel)
+        super(Rename, self).__init__(RENAME_COLLECTION, RenameModel)
 
     def insert(self, **kwargs):
-        return super(NameGuess, self).insert(count=0, **kwargs)
+        return super(Rename, self).insert(count=0, **kwargs)
