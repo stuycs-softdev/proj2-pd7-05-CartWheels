@@ -8,6 +8,7 @@ USER_COLLECTION = 'users'
 CART_COLLECTION = 'carts'
 TAG_COLLECTION = 'tags'
 REVIEW_COLLECTION = 'reviews'
+NAME_GUESS_COLLECTION = 'nameguess'
 
 # Elasticsearch
 ES_REPEAT = 5
