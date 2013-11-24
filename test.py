@@ -21,10 +21,10 @@ for ca in t.get_carts():
 t.detach(c.get_id())
 print len(t.get_carts())
 
-n = renames.insert(name='RAFIQI\'S HALAL', cart_id=c.get_id())
-n.approve()
-c = carts.find_one(_id=c.get_id())
-print c.owner
+#n = renames.insert(name='RAFIQI\'S HALAL', cart_id=c.get_id())
+#n.approve()
+#c = carts.find_one(_id=c.get_id())
+#print c.owner
 
 users.remove_all()
 revs.remove_all()

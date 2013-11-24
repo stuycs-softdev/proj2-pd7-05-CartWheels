@@ -12,10 +12,19 @@ class UserModel(Model):
         self.password = obj['password']
 
     # Change password with authentication
-    def change_password(self, oldpass, newpass):
+    def change_password(self, oldpass, newpass, confirm):
         if oldpass == self.password:
-            self.password = newpass
-            self.collection.update({'_id': self.get_id()}, password=newpass)
+            if newpass == confirm:
+                self.password = newpass
+                self.collection.update({'_id': self.get_id()}, password=newpass)
+                return True
+        return False
+
+    # Change password with authentication
+    def change_username(self, password, newusr):
+        if password == self.password and not self.collection.exists(newusr):
+            self.username = newusr
+            self.collection.update({'_id': self.get_id()}, username=newusr)
             return True
         return False
 
