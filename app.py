@@ -1,6 +1,6 @@
 #!/usr/local/bin/python
 from flask import Flask, render_template, session, redirect, request, url_for
-from models import Cart
+from models import Cart, User
 from settings import SECRET_KEY, STORE_FILE
 import json
 
@@ -8,6 +8,8 @@ import json
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
 carts = Cart()
+users = User()
+
 
 f = open(STORE_FILE)
 api_key = f.readlines()[0].strip()
