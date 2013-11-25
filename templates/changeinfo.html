@@ -3,8 +3,8 @@
 <form method="POST">
   <h3>Please enter your current password to make any changes.</h3>
   <b>Current password</b> <input type="password" name="oldpw"> 
-  {% if error is defined %}
-  <font color=red><sub>{{error}}</sub></font>
+  {% if error %}
+    <font color=red><sub>{{error}}</sub></font>
   {% endif %}
 
   <br>
@@ -15,7 +15,10 @@
   <table class="table" style="border:1px solid rgb(221,221,221)">
     <tr class="active">
       <th>Change username</th>
-      <td><input type="text" name="newuser"> <font color=red><sub>{{usererror}}</sub></font></td>
+      <td><input type="text" name="newuser"> 
+      {% if usererror %}
+        <font color=red><sub>{{usererror}}</sub></font></td>
+      {% endif %}
     </tr>
 
     <tr class="active">
@@ -25,7 +28,10 @@
 
     <tr class="active">
       <th>Verify new password</th>
-      <td><input type="password" name="confirm"> <font color=red><sub>{{passerror}}</sub></font></td>
+      <td><input type="password" name="confirm"> 
+      {% if passerror %}
+        <font color=red><sub>{{passerror}}</sub></font></td>
+      {% endif %}
    </tr>
 
     <tr class="active">
