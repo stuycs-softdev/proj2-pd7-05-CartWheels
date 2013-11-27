@@ -15,18 +15,32 @@ class TagModel(Model):
     def attach(self, cart_id):
         if cart_id not in self.carts:
             self.carts.append(cart_id)
-            self.collection.update({'_id': self.get_id()}, carts=self.carts)
+            self.update(carts=self.carts)
+            carts = Cart()
+            c = carts.find_one(_id=cart_id)
+            if not self.label in c.tags:
+                c.tags.append(self.label)
+            c.update(tags=c.tags)
 
     # Remove a cart which has this tag
     def detach(self, cart_id):
         if cart_id in self.carts:
             self.carts.remove(cart_id)
-            self.collection.update({'_id': self.get_id()}, carts=self.carts)
+            self.update(carts=self.carts)
+            carts = Cart()
+            c = carts.find_one(_id=cart_id)
+            if self.label in c.tags:
+                c.tags.remove(self.label)
+            c.update(tags=c.tags)
 
     # Get carts by tag
     def get_carts(self):
         carts = Cart()
         return [carts.find_one(_id=cid) for cid in self.carts]
+
+    # Get amount of times used
+    def count(self):
+        return len(self.carts)
 
 
 class Tag(Collection):

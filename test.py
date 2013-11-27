@@ -1,4 +1,5 @@
 from models import *
+from bson import ObjectId
 
 
 carts = Cart()
@@ -9,24 +10,13 @@ renames = Rename()
 
 
 u = users.insert(username='Ben', password='goose')
-c = carts.find_one(owner='UNKNOWN')
+c = carts.find_one(_id=ObjectId('52952ef7421aa93b89efcc0e'))
 r = c.add_review(u.username, text='Great place to chow down!', rating=4.5)
 t = tags.insert(label='chow')
 
 t.attach(c.get_id())
-for ca in t.get_carts():
-    for rev in ca.get_reviews():
-        print rev.text
 
-t.detach(c.get_id())
-print len(t.get_carts())
-
-#n = renames.insert(name='RAFIQI\'S HALAL', cart_id=c.get_id())
-#n.approve()
-#c = carts.find_one(_id=c.get_id())
-#print c.owner
-
-users.remove_all()
-revs.remove_all()
-tags.remove_all()
-renames.remove_all()
+#users.remove_all()
+#revs.remove_all()
+#tags.remove_all()
+#renames.remove_all()

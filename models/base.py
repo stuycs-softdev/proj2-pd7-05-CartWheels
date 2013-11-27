@@ -24,6 +24,10 @@ class Model(object):
     def get_date_string(self):
         return self.date.strftime('%A, %B %d')
 
+    # Perform an update
+    def update(self, **kwargs):
+        self.collection.update({'_id': self.get_id()}, **kwargs)
+
     # Removes the object from database
     def remove(self):
         self.objects.remove({'_id': self._id})

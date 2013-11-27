@@ -1,29 +1,28 @@
-<html>
-  <h1>Login!</h1>
-  {% if error is defined %}
-  <font color=red><sub>{{error}}</sub></font>
-  {% endif %}
+{% extends "layout.html" %}
+{% block body %}
+<h1>Login</h1>
+{% if error is defined %}
+<font color=red><sub>{{error}}</sub></font>
+{% endif %}
 
-  <form method="POST">
-    <table class="table" style="border:1px solid rgb(221,221,221)">
-  
-      <tr class="active">
-	<th><b>Username</b></th>
-	<td><input type="text" name="username"></td>
-      </tr>
-  
-      <tr class="active">
-	<th><b>Password</b></th>
-	<td><input type="password" name="password"></td>
-      </tr>
+<form method="POST">
+  <table class="table" style="border:1px solid rgb(221,221,221)">
 
-      <tr class="active">
-	<td colspan="2" style="text-align:center"><input type="submit" name="button" value="Sign in"></td>
-      </tr>
+    <tr class="active">
+      <th><b>Username</b></th>
+      <td><input type="text" name="username"></td>
+    </tr>
 
-    </table>
-  </form>
-  <sub>Don't have an account? <a href="register.html">Register here!</a></sub>
-</html>
+    <tr class="active">
+      <th><b>Password</b></th>
+      <td><input type="password" name="password"></td>
+    </tr>
 
+    <tr class="active">
+      <td colspan="2" style="text-align:center"><input type="submit" name="button" value="Sign in"></td>
+    </tr>
 
+  </table>
+</form>
+<sub>Don't have an account? <a href="register.html">Register here</a></sub>
+{% endblock %}

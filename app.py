@@ -1,5 +1,6 @@
 #!/usr/local/bin/python
 from flask import Flask, render_template, session, redirect, request, url_for
+from bson import ObjectId
 from models import Cart, User
 from settings import SECRET_KEY, STORE_FILE
 import json
@@ -72,7 +73,6 @@ def logout():
 def changeinfo():
     if 'username' not in session:
         return redirect(url_for('home'))
-
     if request.method == 'GET':
         return render_template('changeinfo.html')
 
@@ -94,7 +94,6 @@ def changeinfo():
                 passerror= 'Passwords do not match.'
     else:
         error = 'Incorrect password'
-
     return render_template('changeinfo.html', error=error, usererror=usererror, passerror=passerror)
 
 
@@ -129,15 +128,23 @@ def review(rid):
                 - if it is...
                     * grab the user from the database
                         - u = users.find_one(username=session['username'])
-                    * render the template with the user and the cart to the function 
+                    * render the template with the user and the cart to the function
                         - render_template('index.html', ..., target_cart=target_cart, u=u)
                 - if it isn't
                     * render the template with the target_cart
                         - render_template('index.html', ..., target_cart=target_cart, u=None)
 TODO: Implement POST method'''
-@app.route('/carts/<cid>')
+@app.route('/carts/<cid>', methods=['GET', 'POST'])
 def cart(cid):
-    pass
+    c = carts.find_one(_id=ObjectId(cid))
+    u = None
+    if 'username' in session:
+        u = users.find_one(username=session['username'])
+    if request.method == 'POST':
+        rating = int(request.form['review_rating'])
+        text = request.form['review_text']
+        c.add_review(user=u.username, text=text, rating=rating)
+    return render_template('cart.html', target_cart=c, user=u)
 
 
 # Tag page
@@ -149,7 +156,7 @@ def cart(cid):
             - if it is...
                 * grab the user from the database
                     - u = users.find_one(username=session['username'])
-                * render the template with the user and the tag passed to the function 
+                * render the template with the user and the tag passed to the function
                     - render_template('index.html', ..., tag=tag, u=u)
             - if it isn't
                 * render the template with the tag

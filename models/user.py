@@ -16,7 +16,7 @@ class UserModel(Model):
         if oldpass == self.password:
             if newpass == confirm:
                 self.password = newpass
-                self.collection.update({'_id': self.get_id()}, password=newpass)
+                self.update(password=newpass)
                 return True
         return False
 
@@ -24,7 +24,7 @@ class UserModel(Model):
     def change_username(self, password, newusr):
         if password == self.password and not self.collection.exists(newusr):
             self.username = newusr
-            self.collection.update({'_id': self.get_id()}, username=newusr)
+            self.update(username=newusr)
             return True
         return False
 

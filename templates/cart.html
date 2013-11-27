@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<h1>{{target_cart.owner}}</h1>
+<h3>Zip Code: {{target_cart.zip_code}}</h3>
+<h3>Address: {{target_cart.address}}</h3>
+{% for t in target_cart.tags %}
+<span>{{t}} | </span>
+{% endfor %}
+<br>
+<br>
+<hr>
+
+{% for r in target_cart.get_reviews() %}
+<h3>{{r.rating}}</h3>
+<h4>{{r.user}}</h4>
+<p>{{r.text}}</p>
+<br>
+<hr>
+{% endfor %}
+
+{% if user %}
+{% if not user.get_reviews(cart_id=target_cart.get_id()) %}
+<form method=POST action=#>
+  {% for i in range(1,6) %}
+  <input type=radio name=review_rating value={{i}}>
+    {{i}}
+  </input>
+  {% endfor %}
+  <input type=text name=review_text value=text>
+</form>
+{% endif %}
+{% endif %}
+
+{% endblock %}
