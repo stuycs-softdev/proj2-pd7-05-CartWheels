@@ -14,11 +14,12 @@ class RenameModel(Model):
 
     def increment(self, uid):
         self.count += 1
-        self.collection.update({'_id': self.get_id()}, count=self.count)
+        self.update(count=self.count)
 
     def approve(self):
         carts = Cart()
-        carts.update({'_id': self.cart_id}, owner=self.name)
+        c = carts.find_one(_id=self.cart_id)
+        c.update(owner=self.name)
         self.collection.remove(cart_id=self.cart_id)
 
 

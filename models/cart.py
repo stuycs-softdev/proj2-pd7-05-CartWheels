@@ -15,6 +15,7 @@ class CartModel(Model):
         self.zip_code = obj['zip_code']
         self.borough = obj['borough']
         self.owner = obj['owner']
+        self.tags = obj['tags']
 
     # Assign a value to the image_id
     def add_image(self, image_id):
@@ -41,4 +42,4 @@ class Cart(Collection):
         super(Cart, self).__init__(CART_COLLECTION, CartModel)
 
     def insert(self, **kwargs):
-        return super(Cart, self).insert(**kwargs)
+        return super(Cart, self).insert(tags=[], **kwargs)
