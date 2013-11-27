@@ -164,7 +164,14 @@ def cart(cid):
 TODO: Implement POST method'''
 @app.route('/carts/<label>')
 def tag(label):
-    pass
+    t = tags.find_one(label=ObjectId(label))
+    u = None
+    if 'username' in session:
+        u = users.find_one(username=session['username'])
+        return render_template('index.html', tag=t, user=u.username)
+    else:
+        return render_template('index.html', tag=tag, user=u)
+    
 
 
 # Serves the data from the backend to the frontend js using json module
