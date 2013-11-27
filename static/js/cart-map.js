@@ -50,7 +50,7 @@ $(function () {
                     var contentString = '<div id="content">' +
                         '<div id="siteNotice">' +
                         '</div>' +
-                        '<p>' + value.owner + '</p>' +
+                        '<a href=/carts/' + value._id + ' >' + value.owner + '</p>' +
                         '</div>';
 
                     var infowindow = new google.maps.InfoWindow({
