@@ -2,9 +2,11 @@
 <html>
   <head>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.3.0/pure-min.css">
 
     <script type=text/javascript
-      src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+      src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js">
+    </script>
 
     <script type="text/javascript"
       src="https://maps.googleapis.com/maps/api/js?key={{API_KEY}}&sensor=false">
@@ -16,7 +18,52 @@
 
     {% block head %} {% endblock %}
   </head>
-  <body>
+
+<body>
+  <div class="pure-g-r" id="layout">
+        <a href="#menu" id="menuLink" class="pure-menu-link">
+    <span></span>
+</a>
+
+<div class="pure-u" id="menu">
+    <div class="pure-menu pure-menu-open">
+        <a class="pure-menu-heading" href="/">CartWheels</a>
+
+        <ul>
+          
+            <li class=" ">
+                <a href="/index">Home</a>
+            </li>
+          {% if user == None}
+            <li class=" ">
+                <a href="/login">Login</a>
+            </li>
+          
+            <li class=" ">
+                <a href="/register">Register</a>
+            </li>
+          {% else %}
+            <li class=" ">
+                <a href="/logout">Logout</a>
+            </li>
+          
+            <li class=" ">
+                <a href="/account">Account</a>
+            </li>
+	    
+	    <li class="menu-item-divided">
+	      <a href="/carts">Carts</a>
+	    </li>
+
+	    <li class="">
+	      <a href="/Reviews">Reviews</a>
+	    </li>
+	  
+	   </ul>
+	</div>
+    </div>
+
+
     {% block body %} {% endblock %}
   </body>
 </html>
