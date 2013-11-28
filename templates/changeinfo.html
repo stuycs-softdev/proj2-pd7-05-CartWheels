@@ -3,7 +3,7 @@
 <h1>Account Settings</h1>
 
 <form method="POST">
-  <h3>Please enter your current password to make any changes.</h3>
+  <h3>Hello {{user}}, please enter your current password to make any changes.</h3>
   <b>Current password</b> <input type="password" name="oldpw"> 
   {% if error %}
     <font color=red><sub>{{error}}</sub></font>
@@ -41,4 +41,5 @@
     </tr>
   </table>
 </form>
+<a href="/">Back</a>
 {% endblock %}

@@ -2,12 +2,16 @@
 {% block body %}
 <h1>Register</h1>
 <h3>Please create a username and password.</h3>
+{% if error %}
+<font color=red>{{error}}</font>
+{% endif %}
+<br><br>
 <form method="POST">
   <table class="table" style="border:1px solid rgb(221,221,221)">
 
     <tr class="active">
       <th>Username</th>
-      <td><input type="text" name="username"> <font color=red><sub>{{usererror}}</sub></font></td>
+      <td><input type="text" name="username"></td>
     </tr>
 
     <tr class="active">
@@ -29,5 +33,5 @@
 
   </table>
 </form>
-<sub>Already have an account? <a href="login.html">Login here</a></sub>
+<sub>Already have an account? <a href="login">Login here</a></sub>
 {% endblock %}

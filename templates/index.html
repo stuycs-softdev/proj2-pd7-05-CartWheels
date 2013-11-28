@@ -1,6 +1,16 @@
 {% extends "layout.html" %}
 {% block head %}
 <title>CartWheels</title>
+{% if not logged_in %}
+<a href="register">Register</a>
+<br>
+<a href="login">Login</a>
+{% endif %}
+{% if logged_in %}
+<a href="logout">Logout</a>
+<br>
+<a href="changeinfo">Change Information</a>
+{% endif %}
 <link rel=stylesheet type=text/css href="/static/css/maps.css">
 
 <script type=text/javascript

@@ -31,7 +31,11 @@ f.close()
 TODO: render the template with a list of trending food carts, or reviews'''
 @app.route('/')
 def home():
-    return render_template('index.html', API_KEY=api_key)
+	if 'username' in session:
+		logged_in = True
+	else:
+		logged_in = False
+	return render_template('index.html',logged_in=logged_in,API_KEY=api_key)
 
 
 @app.route('/register',methods=['GET','POST'])
@@ -74,7 +78,7 @@ def changeinfo():
     if 'username' not in session:
         return redirect(url_for('home'))
     if request.method == 'GET':
-        return render_template('changeinfo.html')
+        return render_template('changeinfo.html',user=session['username'])
 
     u = users.find_one(username=session['username'])
     error = None
@@ -94,29 +98,7 @@ def changeinfo():
                 passerror= 'Passwords do not match.'
     else:
         error = 'Incorrect password'
-    return render_template('changeinfo.html', error=error, usererror=usererror, passerror=passerror)
-
-
-# Review page
-'''Map for the user function for the GET method:
-    I. Grab the review from the database
-        - target_rev = reviews.find_one(_id=rid)
-    II. Check if a review exists (use if target_review is not None) with the given id
-        1) If it does...
-            i. Check if the username is in session
-                - if it is...
-                    * grab the user from the database
-                        - u = users.find_one(username=session['username'])
-                    * render the template with the user and the target_review to the function
-                        - render_template('index.html', ..., target_review=target_review, u=u)
-                - if it isn't
-                    * render the template with the target_review
-                        - render_template('index.html', ..., target_review=target_review, u=None)
-TODO: Implement POST method'''
-@app.route('/reviews/<id>')
-def review(rid):
-    pass
-
+    return render_template('changeinfo.html', user=session['username'],error=error, usererror=usererror, passerror=passerror)
 
 # Cart page
 '''Map for the cart function for the GET method:
