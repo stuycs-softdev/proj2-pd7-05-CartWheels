@@ -18,22 +18,12 @@ f.close()
 
 
 # Base function, renders the template with the api key as input
-'''Map for the home function for the GET method:
-    I. Check if the username is in session
-        1) If it is...
-            i. grab the user from the database
-                - u = users.find_one(username=session['username'])
-            ii. render the template, and pass the user as an argument
-                - render_template('index.html', ..., user=u)
-        2) If it isn't
-            i. render the template as normal
-                - render_template('index.html', ...)
-TODO: render the template with a list of trending food carts, or reviews'''
 @app.route('/')
 def home():
     return render_template('index.html', API_KEY=api_key)
 
 
+# Register
 @app.route('/register',methods=['GET','POST'])
 def register():
     if 'username' in session:
@@ -49,6 +39,7 @@ def register():
     return redirect(url_for('home'))
 
 
+# Login
 @app.route('/login',methods=['GET','POST'])
 def login():
     if 'username' in session:
@@ -62,6 +53,7 @@ def login():
     return redirect(url_for('home'))
 
 
+# Logout
 @app.route('/logout')
 def logout():
     if 'username' in session:
@@ -69,18 +61,17 @@ def logout():
     return redirect(url_for('home'))
 
 
+# For the user to change personal information
 @app.route('/changeinfo',methods=['GET','POST'])
 def changeinfo():
     if 'username' not in session:
         return redirect(url_for('home'))
     if request.method == 'GET':
         return render_template('changeinfo.html')
-
     u = users.find_one(username=session['username'])
     error = None
     usererror = None
     passerror = None
-
     if u.password == request.form['oldpw']:
         if request.form['newuser']:
             if not u.change_username(request.form['oldpw'],
@@ -97,43 +88,7 @@ def changeinfo():
     return render_template('changeinfo.html', error=error, usererror=usererror, passerror=passerror)
 
 
-# Review page
-'''Map for the user function for the GET method:
-    I. Grab the review from the database
-        - target_rev = reviews.find_one(_id=rid)
-    II. Check if a review exists (use if target_review is not None) with the given id
-        1) If it does...
-            i. Check if the username is in session
-                - if it is...
-                    * grab the user from the database
-                        - u = users.find_one(username=session['username'])
-                    * render the template with the user and the target_review to the function
-                        - render_template('index.html', ..., target_review=target_review, u=u)
-                - if it isn't
-                    * render the template with the target_review
-                        - render_template('index.html', ..., target_review=target_review, u=None)
-TODO: Implement POST method'''
-@app.route('/reviews/<id>')
-def review(rid):
-    pass
-
-
 # Cart page
-'''Map for the cart function for the GET method:
-    I. Grab the cart from the database
-        - target_cart = carts.find_one(_id=cid)
-    II. Check if a cart exists (use if target_cart is not None) with the given id
-        1) If it does...
-            i. Check if the username is in session
-                - if it is...
-                    * grab the user from the database
-                        - u = users.find_one(username=session['username'])
-                    * render the template with the user and the cart to the function
-                        - render_template('index.html', ..., target_cart=target_cart, u=u)
-                - if it isn't
-                    * render the template with the target_cart
-                        - render_template('index.html', ..., target_cart=target_cart, u=None)
-TODO: Implement POST method'''
 @app.route('/carts/<cid>', methods=['GET', 'POST'])
 def cart(cid):
     c = carts.find_one(_id=ObjectId(cid))
@@ -141,27 +96,19 @@ def cart(cid):
     if 'username' in session:
         u = users.find_one(username=session['username'])
     if request.method == 'POST':
-        rating = int(request.form['review_rating'])
-        text = request.form['review_text']
-        c.add_review(user=u.username, text=text, rating=rating)
+        if request.form['btn'] == 'Submit':
+            rating = int(request.form['review_rating'])
+            text = request.form['review_text']
+            c.add_review(user=u.username, text=text, rating=rating)
+        elif request.form['btn'] == 'Upload':
+            f = request.files['file']
+            c.add_image(f, request.form['img_label'])
+        else:
+            c.add_tag(request.form['tag_label'])
     return render_template('cart.html', target_cart=c, user=u)
 
 
 # Tag page
-'''Map for the tag function
-    I. Grab the tag from the database
-        - tag = tags.find_one(label=label)
-    II. Check if the tag exists (use if target is not None)
-        i. Check if the username is in session
-            - if it is...
-                * grab the user from the database
-                    - u = users.find_one(username=session['username'])
-                * render the template with the user and the tag passed to the function
-                    - render_template('index.html', ..., tag=tag, u=u)
-            - if it isn't
-                * render the template with the tag
-                    - render_template('index.html', ..., tag=tag, u=None)
-TODO: Implement POST method'''
 @app.route('/carts/<label>')
 def tag(label):
     t = tags.find_one(label=ObjectId(label))
@@ -176,20 +123,30 @@ def tag(label):
 # Serves the data from the backend to the frontend js using json module
 @app.route('/_data')
 def serve_data():
+    # Get iterable copy of args
     rargs = request.args.copy()
     kwargs = {}
+    # Copy request args into a copy
     for k in rargs.keys():
         kwargs[k] = rargs[k]
-
     objs = carts.find(**kwargs)
     results = [o._obj for o in objs]
-
+    # Remove incompatible types
     for r in results:
         r.pop('date', None)
         r['_id'] = str(r['_id'])
-
+    # Return results as an array
     data = {'results': results}
     return json.dumps(data)
+
+
+# Get image by id
+@app.route('/_image/<image_id>')
+def serve_image(image_id):
+    image = carts.fs.get(ObjectId(image_id))
+    data = image.read()
+    image.close()
+    return data
 
 
 if __name__ == '__main__':
