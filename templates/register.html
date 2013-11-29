@@ -2,8 +2,7 @@
 {% block body %}
 
 <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.3.0/pure-min.css">
-<h1>Register</h1>
-<h4>Please create a username and password.</h4>
+
 {% if error %}
 <font color=red>{{error}}</font>
 {% endif %}
@@ -12,6 +11,7 @@
 <form method="POST" class="pure-form pure-form-aligned">
   <fieldset>
     <legend>Register</legend>
+    <h4>Please create a username and password.</h4>
     <div class="pure-control-group">
       <label for="user">Username</label>
       <input id="user" type="text" name="username" required="required">
@@ -33,7 +33,7 @@
     </div>
   </fieldset>
 </form>
-<sub>Already have an account? <a href="login">Login here</a></sub>
+<h6>Already have an account? <a href="login">Login here</a></h6>
 <br>
 <a href="/">Back</a>
 {% endblock %}
