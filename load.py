@@ -1,3 +1,4 @@
+#!/usr/local/bin/python
 import urllib2
 import json
 from models import Cart

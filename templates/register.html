@@ -11,22 +11,23 @@
 
     <tr class="active">
       <th>Username</th>
-      <td><input type="text" name="username"></td>
+      <td><input type="text" name="username" required="required"></td>
     </tr>
 
     <tr class="active">
       <th>Password</th>
-      <td><input type="password" name="password"></td>
+      <td><input type="password" name="password" required="required"></td>
     </tr>
     
     <tr>
       <th>Verify Password</th>
-      <td><input type="password" name="confirm"> <font color=red><sub>{{passerror}}</sub></font></td>
+      <td><input type="password" name="confirm" required="required"> <font color=red><sub>{{passerror}}</sub></font></td>
     </tr>
 
     <tr class="active">
       <td colspan="2" style="text-align:center">
         <input type="submit" name="button" value="Register">
+        <input type="reset" name="button" value="Cancel">
       </td>
     </tr>
 

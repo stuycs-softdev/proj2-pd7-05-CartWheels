@@ -4,16 +4,17 @@
 from pymongo import MongoClient
 from gridfs import GridFS
 from datetime import datetime
-from settings import DB_NAME
+from settings import DB_NAME, COLLECTIONS, IGNORE_ATTRS
 
 
 class Model(object):
 
     def __init__(self, db, fs, collection, obj=None):
+        for key in obj:
+            self.__dict__[key] = obj[key]
         self.db = db
         self.collection = collection
-        self.date = obj['date']
-        self._id = obj['_id']
+        self.fs = fs
         self._obj = obj
 
     # Gets _id
@@ -25,8 +26,11 @@ class Model(object):
         return self.date.strftime('%A, %B %d')
 
     # Perform an update
-    def update(self, **kwargs):
-        self.collection.update({'_id': self.get_id()}, **kwargs)
+    def save(self):
+        for key in self.__dict__:
+            if key not in IGNORE_ATTRS:
+                self._obj[key] = self.__dict__[key]
+        self.collection.objects.update({'_id': self.get_id()}, self._obj)
 
     # Removes the object from database
     def remove(self):
@@ -35,12 +39,12 @@ class Model(object):
 
 class Collection(object):
 
-    def __init__(self, name, model=Model):
+    def __init__(self, model=Model):
         client = MongoClient()
         self.db = client[DB_NAME]
         self.fs = GridFS(self.db)
-        self.objects = self.db[name]
-        self.name = name
+        self.objects = self.db[COLLECTIONS[self.__class__.__name__]]
+        self.name = COLLECTIONS[self.__class__.__name__]
         self.model = model
 
     # Converts list of dict objects to Model objects
@@ -67,10 +71,6 @@ class Collection(object):
         kwargs['date'] = datetime.now()
         id = self.objects.insert(kwargs)
         return self.find_one(_id=id)
-
-    # Updates objects in the collection
-    def update(self, conds, **kwargs):
-        self.objects.update(conds, {'$set': kwargs})
 
     # Remove all objects in the collection
     def remove_all(self):
