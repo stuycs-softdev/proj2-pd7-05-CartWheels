@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block body %}
+<h1>Newest Carts</h1>
+<h3>Page {{page}}</h3>
+
+<ul>
+{% for cart in carts %}
+<li>cart</li>
+{% endfor %}
+</ul>
+
+<br>
+{% if p %}
+<a href="/newest_carts/{{p}}">Previous Page</a>
+{% endif %}
+<a href="/newest_carts/{{n}}">Next Page</a>
+<br>
+<a href="/">Back</a>
+{% endblock %}
