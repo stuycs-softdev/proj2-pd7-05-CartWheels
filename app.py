@@ -21,13 +21,15 @@ f.close()
 # Base function, renders the template with the api key as input
 @app.route('/')
 def home():
-	if 'username' in session:
-		user = session['username']
-	else:
-		user = None
-	r = reviews.get_by_date()
-	c = carts.get_by_date()
-	return render_template('index.html',username=user,reviews=r[:5],carts=c[:5],API_KEY=api_key)
+    r = reviews.get_by_date()
+    c = carts.get_by_date()
+    if not 'username' in session:
+        return render_template('index.html', user=None, reviews=r[:5],
+                carts=c[:5], API_KEY=api_key)
+    else:
+        user = users.find_one(username=session['username'])
+	return render_template('index.html',user=user, reviews=r[:5],
+                carts=c[:5], API_KEY=api_key)
 
 
 # Register
@@ -38,11 +40,12 @@ def register():
     if request.method == 'GET':
         return render_template('register.html')
     if users.exists(request.form['username']):
-        return render_template('register.html',error='Username already exists')
+        return render_template('register.html', error='Username already exists')
     if request.form['password'] != request.form['confirm']:
-        return render_template('register.html',error='Passwords do not match')
+        return render_template('register.html', error='Passwords do not match')
     session['username'] = request.form['username']
-    users.insert(username=request.form['username'],password=request.form['password'])
+    users.insert(username=request.form['username'],
+            password=request.form['password'])
     return redirect(url_for('home'))
 
 
@@ -53,9 +56,11 @@ def login():
         return redirect(url_for('home'))
     if request.method == 'GET':
         return render_template('login.html')
-    u = users.find_one(username=request.form['username'], password=request.form['password'])
+    u = users.find_one(username=request.form['username'],
+            password=request.form['password'])
     if not u:
-        return render_template('login.html', error='Incorrect username or password')
+        return render_template('login.html',
+                error='Incorrect username or password')
     session['username'] = request.form['username']
     return redirect(url_for('home'))
 
@@ -69,7 +74,7 @@ def logout():
 
 
 # For the user to change personal information
-@app.route('/changeinfo',methods=['GET','POST'])
+@app.route('/changeinfo', methods=['GET', 'POST'])
 def changeinfo():
     if 'username' not in session:
         return redirect(url_for('home'))
@@ -94,56 +99,44 @@ def changeinfo():
         error = 'Incorrect password'
     return render_template('changeinfo.html', user=session['username'],error=error, usererror=usererror, passerror=passerror)
 
-@app.route('/newest_reviews/<page>',methods=['GET','POST'])
-def newReviews(page):
-	r = reviews.get_by_date()
-	start = (int(page)-1)*20
-	end = int(page)*21
-	p = None
-	n = int(page)+1
-	if int(page) > 1:
-		p = int(page)-1
-	return render_template('reviews.html',reviews=r[start:end],page=page,p=p,n=n)
 
 # Cart page
-@app.route('/carts/<cid>', methods=['GET', 'POST'])
-def cart(cid):
+@app.route('/carts/<string:cid>', methods=['GET', 'POST'])
+def cart_page(cid):
     c = carts.find_one(_id=ObjectId(cid))
-    u = None
     if 'username' in session:
         u = users.find_one(username=session['username'])
-    if request.method == 'POST':
-        if request.form['btn'] == 'Submit':
-            rating = int(request.form['review_rating'])
-            text = request.form['review_text']
-            c.add_review(user=u.username, text=text, rating=rating)
-        elif request.form['btn'] == 'Upload':
-            f = request.files['file']
-            c.add_image(f, request.form['img_label'])
-        else:
-            c.add_tag(request.form['tag_label'])
-    return render_template('cart.html', target_cart=c, user=u)
+        if request.method == 'POST':
+            if request.form['btn'] == 'Submit':
+                rating = int(request.form['review_rating'])
+                text = request.form['review_text']
+                c.add_review(user=u.username, text=text, rating=rating)
+            elif request.form['btn'] == 'Upload':
+                f = request.files['file']
+                c.add_image(f, request.form['img_label'])
+            else:
+                c.add_tag(request.form['tag_label'])
+        return render_template('cart.html', target_cart=c, user=u)
+    return render_template('cart.html', target_cart=c, user=None)
 
-@app.route('/newest_carts/<page>')
-def newCarts(page):
+
+# Carts ordered by date
+@app.route('/newest-carts/<int:page>')
+def new_carts(page):
 	c = carts.get_by_date()
-	start = (int(page)-1)*20
-	end = int(page)*20
-	p = None
-	n = int(page)+1
-	if int(page) > 1:
-		p = int(page)-1
-	return render_template("newCarts.html",carts=c[start:end],page=page,p=p,n=n)
+	start = (page - 1) * 20
+	end = page * 20
+	return render_template("carts.html", carts=c[start:end], page=page)
 
-# Tag page
-@app.route('/carts/<label>')
-def tag(label):
-    t = tags.find_one(label=ObjectId(label))
-    u = None
-    if 'username' in session:
-	u = session['username']
-    return render_template('index.html', tag=t, user=u)
-    
+
+# Reviews ordered by date
+@app.route('/newest-reviews/<int:page>')
+def new_reviews(page):
+    r = reviews.get_by_date()
+    start = (page - 1) * 20
+    end = page * 20
+    return render_template('reviews.html', reviews=r[start:end], page=page)
+
 
 # Serves the data from the backend to the frontend js using json module
 @app.route('/_data')

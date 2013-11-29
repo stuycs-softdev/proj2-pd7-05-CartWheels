@@ -33,7 +33,7 @@
 
   </table>
 </form>
-<sub>Already have an account? <a href="login">Login here</a></sub>
+<sub>Already have an account? <a href="{{ url_for('login') }}">Login here</a></sub>
 <br>
-<sub><a href="/">Back</a></sub>
+<sub><a href="{{ url_for('home') }}">Back</a></sub>
 {% endblock %}

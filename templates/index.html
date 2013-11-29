@@ -1,24 +1,19 @@
 {% extends "layout.html" %}
 {% block head %}
 <title>CartWheels</title>
-{% if not username %}
-Hello Guest.
+{% if not user %}
+<a href="{{ url_for('register') }}">Register</a>
 <br>
-<a href="register">Register</a>
+<a href="{{ url_for('login') }}">Login</a>
+{% else %}
+<a href="{{ url_for('logout') }}">Logout</a>
 <br>
-<a href="login">Login</a>
+<a href="{{ url_for('changeinfo') }}">Change Information</a>
 {% endif %}
-{% if username %}
-Hello {{username}}.
-<br>
-<a href="logout">Logout</a>
-<br>
-<a href="changeinfo">Change Information</a>
-{% endif %}
-<link rel=stylesheet type=text/css href="/static/css/maps.css">
+<link rel=stylesheet type=text/css href="{{ url_for('static', filename='css/maps.css') }}">
 
 <script type=text/javascript
-  src="/static/js/cart-map.js"></script>
+  src="{{ url_for('static', filename='js/cart-map.js') }}"></script>
 {% endblock %}
 
 {% block body %}
@@ -36,14 +31,14 @@ Hello {{username}}.
 <div id="map-canvas"></div>
 
 <br><br><br>
-<a href="/newest_reviews/1">Newest Reviews</a>
+<a href="{{ url_for('new_reviews', page=1) }}">Newest Reviews</a>
 <ul>
 {% for review in reviews %}
 <li>review</li>
 {% endfor %}
 </ul>
 <br><br>
-<a href="newest_carts/1">Newest Carts</a>
+<a href="{{ url_for('new_carts', page=1) }}">Newest Carts</a>
 <ul>
 {% for cart in carts %}
 <li>cart</li>
