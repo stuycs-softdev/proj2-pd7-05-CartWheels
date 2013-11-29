@@ -1,45 +1,48 @@
 {% extends "layout.html" %}
 {% block body %}
-<h1>Account Settings</h1>
 
-<form method="POST">
-  <h3>Hello {{user}}, please enter your current password to make any changes.</h3>
-  <b>Current password</b> <input type="password" name="oldpw" required="required"> 
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.3.0/pure-min.css">
+
+<h1>Account Settings</h1>
+<h3>Hello {{user}}.</h3>
+
+<form method="POST" class="pure-form">
+
+  <fieldset class="pure-group">
+<legend>Please enter your current password to make any changes.</legend>
+
+<input id="pw" type="password" name="oldpw" placeholder="Current password" required="required"> 
   {% if error %}
     <font color=red><sub>{{error}}</sub></font>
   {% endif %}
+</fieldset>
 
-  <br>
-  <br>
-
-  <h3>Make your changes:</h3>
-
-  <table class="table" style="border:1px solid rgb(221,221,221)">
-    <tr class="active">
-      <th>Change username</th>
-      <td><input type="text" name="newuser"> 
+<h2>Make your changes</h2>
+<fieldset class="pure-group">
+  <legend>Change username</legend>
       {% if usererror %}
-        <font color=red><sub>{{usererror}}</sub></font></td>
+        <font color=red><sub>{{usererror}}</sub></font>
       {% endif %}
-    </tr>
+      <input type="text" class=pure-input-1-2" placeholder="New username" name="newuser"> 
+</fieldset>
 
-    <tr class="active">
-      <th>Change password</th>
-      <td><input type="password" name="newpw"></td>
-    </tr>
-
-    <tr class="active">
-      <th>Verify new password</th>
-      <td><input type="password" name="confirm"> 
-      {% if passerror %}
-        <font color=red><sub>{{passerror}}</sub></font></td>
+  
+<fieldset class="pure-group">
+<legend>Change password</legend>
+    {% if passerror %}
+        <font color=red><sub>{{passerror}}</sub></font>
       {% endif %}
-   </tr>
+      <input type="password" class="pure-input-1-2" placeholder="New password" name="newpw"></td>
 
-    <tr class="active">
-      <td colspan="2" style="text-align:center"><input type="submit" name="button" value="Submit"></td>
-    </tr>
-  </table>
+      <input type="password" class="pure-input-1-2" placeholder="Verify Password" name="confirm"> 
+
+</fieldset>
+
+<br>
+<button type="submit" class="pure-button pure-button-primary">Submit</button>
+
 </form>
+
+<br>
 <a href="{{ url_for('home') }}">Back</a>
 {% endblock %}
