@@ -1,12 +1,16 @@
 {% extends "layout.html" %}
 {% block head %}
 <title>CartWheels</title>
-{% if not logged_in %}
+{% if not username %}
+Hello Guest.
+<br>
 <a href="register">Register</a>
 <br>
 <a href="login">Login</a>
 {% endif %}
-{% if logged_in %}
+{% if username %}
+Hello {{username}}.
+<br>
 <a href="logout">Logout</a>
 <br>
 <a href="changeinfo">Change Information</a>
@@ -30,4 +34,20 @@
 </div>
 
 <div id="map-canvas"></div>
+
+<br><br><br>
+<a href="/newest_reviews/1">Newest Reviews</a>
+<ul>
+{% for review in reviews %}
+<li>review</li>
+{% endfor %}
+</ul>
+<br><br>
+<a href="newest_carts/1">Newest Carts</a>
+<ul>
+{% for cart in carts %}
+<li>cart</li>
+{% endfor %}
+</ul>
+<br><br>
 {% endblock %}

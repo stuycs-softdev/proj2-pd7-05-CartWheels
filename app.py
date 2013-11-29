@@ -1,7 +1,7 @@
 #!/usr/local/bin/python
 from flask import Flask, render_template, session, redirect, request, url_for
 from bson import ObjectId
-from models import Cart, User
+from models import Cart, User, Review
 from settings import SECRET_KEY, STORE_FILE
 import json
 
@@ -10,7 +10,7 @@ app = Flask(__name__)
 app.secret_key = SECRET_KEY
 carts = Cart()
 users = User()
-
+reviews = Review()
 
 f = open(STORE_FILE)
 api_key = f.readlines()[0].strip()
@@ -32,10 +32,12 @@ TODO: render the template with a list of trending food carts, or reviews'''
 @app.route('/')
 def home():
 	if 'username' in session:
-		logged_in = True
+		user = session['username']
 	else:
-		logged_in = False
-	return render_template('index.html',logged_in=logged_in,API_KEY=api_key)
+		user = None
+	r = reviews.get_by_date()
+	c = carts.get_by_date()
+	return render_template('index.html',username=user,reviews=r[:5],carts=c[:5],API_KEY=api_key)
 
 
 @app.route('/register',methods=['GET','POST'])
@@ -100,6 +102,17 @@ def changeinfo():
         error = 'Incorrect password'
     return render_template('changeinfo.html', user=session['username'],error=error, usererror=usererror, passerror=passerror)
 
+@app.route('/newest_reviews/<page>',methods=['GET','POST'])
+def newReviews(page):
+	r = reviews.get_by_date()
+	start = (int(page)-1)*20
+	end = int(page)*21
+	p = None
+	n = int(page)+1
+	if int(page) > 1:
+		p = int(page)-1
+	return render_template('reviews.html',reviews=r[start:end],page=page,p=p,n=n)
+
 # Cart page
 '''Map for the cart function for the GET method:
     I. Grab the cart from the database
@@ -128,6 +141,16 @@ def cart(cid):
         c.add_review(user=u.username, text=text, rating=rating)
     return render_template('cart.html', target_cart=c, user=u)
 
+@app.route('/newest_carts/<page>')
+def newCarts(page):
+	c = carts.get_by_date()
+	start = (int(page)-1)*20
+	end = int(page)*20
+	p = None
+	n = int(page)+1
+	if int(page) > 1:
+		p = int(page)-1
+	return render_template("newCarts.html",carts=c[start:end],page=page,p=p,n=n)
 
 # Tag page
 '''Map for the tag function
@@ -149,10 +172,8 @@ def tag(label):
     t = tags.find_one(label=ObjectId(label))
     u = None
     if 'username' in session:
-        u = users.find_one(username=session['username'])
-        return render_template('index.html', tag=t, user=u.username)
-    else:
-        return render_template('index.html', tag=tag, user=u)
+	u = session['username']
+    return render_template('index.html', tag=t, user=u)
     
 
 
