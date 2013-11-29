@@ -168,11 +168,10 @@ def tag(label):
     u = None
     if 'username' in session:
         u = users.find_one(username=session['username'])
-        return render_template('index.html', tag=t, user=u.username)
+        return render_template('tag.html', tag=t, user=u.username)
     else:
-        return render_template('index.html', tag=tag, user=u)
+        return render_template('tag.html', tag=tag, user=u)
     
-
 
 # Serves the data from the backend to the frontend js using json module
 @app.route('/_data')
