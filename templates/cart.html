@@ -15,11 +15,11 @@
   <input type=text name=tag_label placeholder="New tag">
   <input type=submit name=btn value=Tag>
 </form>
+{% endif %}
 </span>
 <br>
 <br>
 <hr>
-{% endif %}
 
 {% for r in target_cart.get_reviews() %}
 <h3>{{r.rating}}</h3>
