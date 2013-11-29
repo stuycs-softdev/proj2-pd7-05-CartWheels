@@ -1,38 +1,22 @@
 {% extends "layout.html" %}
 {% block body %}
-<<<<<<< HEAD
 
 <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.3.0/pure-min.css">
-=======
 <h1>Register</h1>
-<h3>Please create a username and password.</h3>
+<h4>Please create a username and password.</h4>
 {% if error %}
 <font color=red>{{error}}</font>
 {% endif %}
-<br><br>
-<form method="POST">
-  <table class="table" style="border:1px solid rgb(221,221,221)">
-
-    <tr class="active">
-      <th>Username</th>
-      <td><input type="text" name="username" required="required"></td>
-    </tr>
->>>>>>> 0c3a7d8ef75204315adb5e8c853a1676877da03b
-
-<h4>Please create a username and password.</h4>
-{% if error %}
- <font color=red>{{error}}</font>
- {% endif %}
- <br>
+<br>
 <br>
 <form method="POST" class="pure-form pure-form-aligned">
   <fieldset>
-<legend>Register</legend>
+    <legend>Register</legend>
     <div class="pure-control-group">
       <label for="user">Username</label>
       <input id="user" type="text" name="username" required="required">
     </div>
-
+    
     <div class="pure-control-group">
       <label for="pw">Password</label>
       <input id="pw" type="password" name="password" required="required">
@@ -42,20 +26,14 @@
       <label for="pw2">Verify Password</label>
       <input id="pw2" type="password" name="confirm" required="required">
     </div>
-
+    
     <div class="pure-controls">
-        <button type="submit" name="button" class="pure-button pure-button-primary" value="Register">Register</button>
-        <button type="reset" name="button" class="pure-button pure-button-primary" value="Cancel">Cancel</button>
-      </div>
+      <button type="submit" name="button" class="pure-button pure-button-primary" value="Register">Register</button>
+      <button type="reset" name="button" class="pure-button pure-button-primary" value="Cancel">Cancel</button>
+    </div>
   </fieldset>
 </form>
-<<<<<<< HEAD
-<h6>Already have an account? <a href="login">Login here</a></h6>
-<br>
-<sub><a href="/">Back</a><sub>
-=======
 <sub>Already have an account? <a href="login">Login here</a></sub>
 <br>
-<sub><a href="/">Back</a></sub>
->>>>>>> 0c3a7d8ef75204315adb5e8c853a1676877da03b
+<a href="/">Back</a>
 {% endblock %}
