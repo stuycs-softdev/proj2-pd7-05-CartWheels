@@ -4,7 +4,7 @@
 from pymongo import MongoClient
 from gridfs import GridFS
 from datetime import datetime
-from settings import DB_NAME, IGNORE_ATTRS
+from settings import DB_NAME, COLLECTIONS, IGNORE_ATTRS
 
 
 class Model(object):
@@ -39,12 +39,12 @@ class Model(object):
 
 class Collection(object):
 
-    def __init__(self, name, model=Model):
+    def __init__(self, model=Model):
         client = MongoClient()
         self.db = client[DB_NAME]
         self.fs = GridFS(self.db)
-        self.objects = self.db[name]
-        self.name = name
+        self.objects = self.db[COLLECTIONS[self.__class__.__name__]]
+        self.name = COLLECTIONS[self.__class__.__name__]
         self.model = model
 
     # Converts list of dict objects to Model objects

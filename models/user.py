@@ -1,7 +1,6 @@
 # Models and Collections for users
 from models.base import Collection, Model
 from models.review import Review
-from settings import USER_COLLECTION
 
 
 ''' Format for an insert would be:
@@ -38,7 +37,7 @@ class UserModel(Model):
 class User(Collection):
 
     def __init__(self):
-        super(User, self).__init__(USER_COLLECTION, UserModel)
+        super(User, self).__init__(UserModel)
 
     def insert(self, **kwargs):
         return super(User, self).insert(**kwargs)

@@ -1,7 +1,6 @@
 # Models and Collections for name guesses
 from models.base import Collection, Model
 from models.cart import Cart
-from settings import RENAME_COLLECTION
 
 
 ''' Format for an insert would be:
@@ -27,7 +26,7 @@ class RenameModel(Model):
 class Rename(Collection):
 
     def __init__(self):
-        super(Rename, self).__init__(RENAME_COLLECTION, RenameModel)
+        super(Rename, self).__init__(RenameModel)
 
     def insert(self, **kwargs):
         return super(Rename, self).insert(count=0, **kwargs)

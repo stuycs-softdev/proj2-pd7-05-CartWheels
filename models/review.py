@@ -1,6 +1,5 @@
 # Models and Collections for reviews
 from models.base import Collection, Model
-from settings import REVIEW_COLLECTION
 
 
 ''' Format for an insert would be:
@@ -15,7 +14,7 @@ class ReviewModel(Model):
 class Review(Collection):
 
     def __init__(self):
-        super(Review, self).__init__(REVIEW_COLLECTION, ReviewModel)
+        super(Review, self).__init__(ReviewModel)
 
     def insert(self, **kwargs):
         return super(Review, self).insert(**kwargs)

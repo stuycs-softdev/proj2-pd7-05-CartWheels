@@ -3,7 +3,6 @@ from datetime import datetime
 from models.base import Collection, Model
 from models.review import Review
 from models.tag import Tag
-from settings import CART_COLLECTION
 
 
 ''' Format for an insert would be:
@@ -51,7 +50,7 @@ class CartModel(Model):
 class Cart(Collection):
 
     def __init__(self):
-        super(Cart, self).__init__(CART_COLLECTION, CartModel)
+        super(Cart, self).__init__(CartModel)
 
     def insert(self, **kwargs):
         return super(Cart, self).insert(tags=[], images=[], **kwargs)

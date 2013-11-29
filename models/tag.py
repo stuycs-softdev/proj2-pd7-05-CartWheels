@@ -1,6 +1,5 @@
 # Models and Collections for tags
 from models.base import Collection, Model
-from settings import TAG_COLLECTION
 
 
 ''' Format for an insert would be:
@@ -15,7 +14,7 @@ class TagModel(Model):
 class Tag(Collection):
 
     def __init__(self):
-        super(Tag, self).__init__(TAG_COLLECTION, TagModel)
+        super(Tag, self).__init__(TagModel)
 
     def insert(self, **kwargs):
         return super(Tag, self).insert(count=0, **kwargs)

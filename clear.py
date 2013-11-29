@@ -1,12 +1,12 @@
+#!/usr/local/bin/python
 from models import *
+from settings import COLLECTIONS
 
-carts = Cart()
-users = User()
-revs = Review()
-tags = Tag()
+models = Collection()
 
-renames = Rename()
-users.remove_all()
-revs.remove_all()
-tags.remove_all()
-renames.remove_all()
+for key in COLLECTIONS:
+    val = COLLECTIONS[key]
+    if val != 'ignore':
+        models.db[val].drop()
+
+models.db.fs.drop()
