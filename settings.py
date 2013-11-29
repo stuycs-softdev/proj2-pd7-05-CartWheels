@@ -9,6 +9,7 @@ CART_COLLECTION = 'carts'
 TAG_COLLECTION = 'tags'
 REVIEW_COLLECTION = 'reviews'
 RENAME_COLLECTION = 'nameguess'
+IGNORE_ATTRS = ['_obj', 'collection', 'fs', 'db']
 
 # Elasticsearch
 ES_REPEAT = 5
