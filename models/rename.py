@@ -4,22 +4,23 @@ from models.cart import Cart
 from settings import RENAME_COLLECTION
 
 
+''' Format for an insert would be:
+    rnames.insert(name=...,cart_id=...)
+'''
 class RenameModel(Model):
 
     def __init__(self, db, fs, collection, obj):
         super(RenameModel, self).__init__(db, fs, collection, obj)
-        self.name = obj['name']
-        self.cart_id = obj['cart_id']
-        self.count = obj['count']
 
     def increment(self, uid):
         self.count += 1
-        self.update(count=self.count)
+        self.save()
 
     def approve(self):
         carts = Cart()
         c = carts.find_one(_id=self.cart_id)
-        c.update(owner=self.name)
+        c.owner = self.name
+        c.save()
         self.collection.remove(cart_id=self.cart_id)
 
 
