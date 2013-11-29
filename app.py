@@ -1,13 +1,14 @@
 #!/usr/local/bin/python
 from flask import Flask, render_template, session, redirect, request, url_for
 from bson import ObjectId
-from models import Cart, User, Review
+from models import Collection, Cart, User, Review
 from settings import SECRET_KEY, STORE_FILE
 import json
 
 
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
+models = Collection()
 carts = Cart()
 users = User()
 reviews = Review()
@@ -167,7 +168,7 @@ def serve_data():
 # Get image by id
 @app.route('/_image/<image_id>')
 def serve_image(image_id):
-    image = carts.fs.get(ObjectId(image_id))
+    image = models.fs.get(ObjectId(image_id))
     data = image.read()
     image.close()
     return data
