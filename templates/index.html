@@ -1,23 +1,7 @@
 {% extends "layout.html" %}
+
 {% block head %}
-
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/maps.css') }}">
-<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.3.0/pure-min.css">
-
-<div class="pure-menu pure-menu-open pure-menu-horizontal">
-  <a href="#" class="pure-menu-heading">CartWheels</a>
-
-  <ul>
-    <li class="pure-menu-selected"><a href="#">Home</a></li>
-    {% if not user %}
-    <li><a href="{{ url_for('register') }}">Register</a></li>
-    <li><a href="{{ url_for('login') }}">Login</a></li>
-    {% else %}
-    <li><a href="{{ url_for('logout') }}">Logout</a></li>
-    <li><a href="{{ url_for('changeinfo') }}">Account Settings</a></li>
-    {% endif %}
-  </ul>
-</div>
 
 <script type=text/javascript
   src="{{ url_for('static', filename='js/cart-map.js') }}"></script>
