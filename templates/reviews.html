@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+{% block body %}
+<h1>Newest Reviews</h1>
+<h3>Page {{page}}</h3>
+
+<ul>
+{% for review in reviews %}
+<li>review</li>
+{% endfor %}
+</ul>
+
+<br>
+{% if p %}
+<a href="/newest_reviews/{{p}}">Previous Page</a>
+{% endif %}
+<a href="/newest_reviews/{{n}}">Next Page</a>
+<br>
+<a href="/">Back</a>
+{% endblock %}

@@ -1,7 +1,7 @@
 #!/usr/local/bin/python
 from flask import Flask, render_template, session, redirect, request, url_for
 from bson import ObjectId
-from models import Cart, User
+from models import Cart, User, Review
 from settings import SECRET_KEY, STORE_FILE
 import json
 
@@ -10,7 +10,7 @@ app = Flask(__name__)
 app.secret_key = SECRET_KEY
 carts = Cart()
 users = User()
-
+reviews = Review()
 
 f = open(STORE_FILE)
 api_key = f.readlines()[0].strip()
@@ -20,7 +20,13 @@ f.close()
 # Base function, renders the template with the api key as input
 @app.route('/')
 def home():
-    return render_template('index.html', API_KEY=api_key)
+	if 'username' in session:
+		user = session['username']
+	else:
+		user = None
+	r = reviews.get_by_date()
+	c = carts.get_by_date()
+	return render_template('index.html',username=user,reviews=r[:5],carts=c[:5],API_KEY=api_key)
 
 
 # Register
@@ -67,7 +73,7 @@ def changeinfo():
     if 'username' not in session:
         return redirect(url_for('home'))
     if request.method == 'GET':
-        return render_template('changeinfo.html')
+        return render_template('changeinfo.html',user=session['username'])
     u = users.find_one(username=session['username'])
     error = None
     usererror = None
@@ -85,8 +91,18 @@ def changeinfo():
                 passerror= 'Passwords do not match.'
     else:
         error = 'Incorrect password'
-    return render_template('changeinfo.html', error=error, usererror=usererror, passerror=passerror)
+    return render_template('changeinfo.html', user=session['username'],error=error, usererror=usererror, passerror=passerror)
 
+@app.route('/newest_reviews/<page>',methods=['GET','POST'])
+def newReviews(page):
+	r = reviews.get_by_date()
+	start = (int(page)-1)*20
+	end = int(page)*21
+	p = None
+	n = int(page)+1
+	if int(page) > 1:
+		p = int(page)-1
+	return render_template('reviews.html',reviews=r[start:end],page=page,p=p,n=n)
 
 # Cart page
 @app.route('/carts/<cid>', methods=['GET', 'POST'])
@@ -107,6 +123,16 @@ def cart(cid):
             c.add_tag(request.form['tag_label'])
     return render_template('cart.html', target_cart=c, user=u)
 
+@app.route('/newest_carts/<page>')
+def newCarts(page):
+	c = carts.get_by_date()
+	start = (int(page)-1)*20
+	end = int(page)*20
+	p = None
+	n = int(page)+1
+	if int(page) > 1:
+		p = int(page)-1
+	return render_template("newCarts.html",carts=c[start:end],page=page,p=p,n=n)
 
 # Tag page
 @app.route('/carts/<label>')
@@ -114,10 +140,8 @@ def tag(label):
     t = tags.find_one(label=ObjectId(label))
     u = None
     if 'username' in session:
-        u = users.find_one(username=session['username'])
-        return render_template('tag.html', tag=t, user=u.username)
-    else:
-        return render_template('tag.html', tag=tag, user=u)
+	u = session['username']
+    return render_template('index.html', tag=t, user=u)
     
 
 # Serves the data from the backend to the frontend js using json module
