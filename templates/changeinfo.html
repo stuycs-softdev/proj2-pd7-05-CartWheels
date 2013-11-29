@@ -9,37 +9,40 @@
 <form method="POST" class="pure-form">
 
   <fieldset class="pure-group">
-<legend>Please enter your current password to make any changes.</legend>
-
-<input id="pw" type="password" name="oldpw" placeholder="Current password" required="required"> 
-  {% if error %}
-    <font color=red><sub>{{error}}</sub></font>
-  {% endif %}
-</fieldset>
-
-<h2>Make your changes</h2>
-<fieldset class="pure-group">
-  <legend>Change username</legend>
-      {% if usererror %}
-        <font color=red><sub>{{usererror}}</sub></font>
-      {% endif %}
-      <input type="text" class=pure-input-1-4" placeholder="New username" name="newuser"> 
-</fieldset>
-
+    <legend>Please enter your current password to make any changes.</legend>
+    {% if error %}
+    <font color=red>{{error}}</font>
+    {% endif %}
+    <input id="pw" type="password" name="oldpw" placeholder="Current password" required="required"> 
+  </fieldset>
   
-<fieldset class="pure-group">
-<legend>Change password</legend>
+  <h2>Make your changes</h2>
+  
+  <fieldset class="pure-group">
+    <legend>Change username</legend>
+    {% if usererror %}
+    <font color=red>{{usererror}}</font>
+    {% endif %}
+    {% if usersuccess %}
+    <font color=green>{{usersuccess}}</font>
+    {% endif %}
+    <input type="text" class="pure-input-1-4" placeholder="New username" name="newuser"> 	
+  </fieldset>
+
+  <fieldset class="pure-group">
+    <legend>Change password</legend>
     {% if passerror %}
-        <font color=red><sub>{{passerror}}</sub></font>
-      {% endif %}
-      <input type="password" class="pure-input-1-4" placeholder="New password" name="newpw"></td>
+    <font color=red>{{passerror}}</font>
+    {% endif %}
+    {% if pwsuccess %}
+    <font color=green>{{pwsuccess}}</font>
+    {% endif %}
+    <input type="password" class="pure-input-1-4" placeholder="New password" name="newpw">
+    <input type="password" class="pure-input-1-4" placeholder="Verify Password" name="confirm"> 
+  </fieldset>
 
-      <input type="password" class="pure-input-1-4" placeholder="Verify Password" name="confirm"> 
-
-</fieldset>
-
-<br>
-<button type="submit" class="pure-button pure-button-primary">Submit</button>
+  <br>
+  <button type="submit" class="pure-button pure-button-primary">Submit</button>
 
 </form>
 
