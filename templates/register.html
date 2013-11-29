@@ -1,33 +1,39 @@
 {% extends "layout.html" %}
 {% block body %}
-<h1>Register</h1>
-<h3>Please create a username and password.</h3>
-<form method="POST">
-  <table class="table" style="border:1px solid rgb(221,221,221)">
 
-    <tr class="active">
-      <th>Username</th>
-      <td><input type="text" name="username" required="required"> <font color=red><sub>{{usererror}}</sub></font></td>
-    </tr>
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.3.0/pure-min.css">
 
-    <tr class="active">
-      <th>Password</th>
-      <td><input type="password" name="password" required="required"></td>
-    </tr>
+<h4>Please create a username and password.</h4>
+{% if error %}
+ <font color=red>{{error}}</font>
+ {% endif %}
+ <br>
+<br>
+<form method="POST" class="pure-form pure-form-aligned">
+  <fieldset>
+<legend>Register</legend>
+    <div class="pure-control-group">
+      <label for="user">Username</label>
+      <input id="user" type="text" name="username" required="required">
+    </div>
+
+    <div class="pure-control-group">
+      <label for="pw">Password</label>
+      <input id="pw" type="password" name="password" required="required">
+    </div>
     
-    <tr>
-      <th>Verify Password</th>
-      <td><input type="password" name="confirm" required="required"> <font color=red><sub>{{passerror}}</sub></font></td>
-    </tr>
+    <div class="pure-control-group">
+      <label for="pw2">Verify Password</label>
+      <input id="pw2" type="password" name="confirm" required="required">
+    </div>
 
-    <tr class="active">
-      <td colspan="2" style="text-align:center">
-        <input type="submit" name="button" value="Register">
-        <input type="reset" name="button" value="Cancel">
-      </td>
-    </tr>
-
-  </table>
+    <div class="pure-controls">
+        <button type="submit" name="button" class="pure-button pure-button-primary" value="Register">Register</button>
+        <button type="reset" name="button" class="pure-button pure-button-primary" value="Cancel">Cancel</button>
+      </div>
+  </fieldset>
 </form>
-<sub>Already have an account? <a href="login.html">Login here</a></sub>
+<h6>Already have an account? <a href="login">Login here</a></h6>
+<br>
+<sub><a href="/">Back</a><sub>
 {% endblock %}

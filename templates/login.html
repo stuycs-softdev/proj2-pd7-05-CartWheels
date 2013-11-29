@@ -1,28 +1,32 @@
 {% extends "layout.html" %}
 {% block body %}
-<h1>Login</h1>
-{% if error is defined %}
-<font color=red><sub>{{error}}</sub></font>
-{% endif %}
 
-<form method="POST">
-  <table class="table" style="border:1px solid rgb(221,221,221)">
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.3.0/pure-min.css">
 
-    <tr class="active">
-      <th><b>Username</b></th>
-      <td><input type="text" name="username" required="required"></td>
-    </tr>
+<form method="POST" class="pure-form pure-form-aligned">
+  <fieldset>
+    <legend>Login</legend>
 
-    <tr class="active">
-      <th><b>Password</b></th>
-      <td><input type="password" name="password" required="required"></td>
-    </tr>
+    {% if error is defined %}
+    <font color=red>{{error}}</font>
+    {% endif %}
 
-    <tr class="active">
-      <td colspan="2" style="text-align:center"><input type="submit" name="button" value="Sign in"></td>
-    </tr>
+    <div class="pure-control-group">
+      <label for="user">Username</label>
+      <input id="user" type="text" name="username" placeholder="Username" required="required">
+    </div>
 
-  </table>
+    <div class="pure-control-group">
+		<label for="pw">Password</label>
+		<input id="user" type="password" name="password" placeholder="Password" required="required">
+</div>
+
+<div class="pure-controls">
+  <button type="submit" class="pure-button pure-button-primary">Sign in</button>
+</div>
+</fieldset>
 </form>
-<sub>Don't have an account? <a href="register.html">Register here</a></sub>
+<h6>Don't have an account? <a href="register">Register here</a></h6>
+<br>
+<sub><a href="/">Back</a></sub>
 {% endblock %}
