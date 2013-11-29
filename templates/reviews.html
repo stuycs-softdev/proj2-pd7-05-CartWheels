@@ -3,17 +3,19 @@
 <h1>Newest Reviews</h1>
 <h3>Page {{page}}</h3>
 
-<ul>
-{% for review in reviews %}
-<li>review</li>
+{% for r in reviews %}
+<h3>{{r.rating}}</h3>
+<h4>{{r.user}}</h4>
+<p>{{r.text}}</p>
+<br>
+<hr>
 {% endfor %}
-</ul>
 
 <br>
-{% if p %}
-<a href="/newest_reviews/{{p}}">Previous Page</a>
+{% if page > 1 %}
+<a href="{{ url_for('new_reviews', page=page-1) }}">Previous Page</a>
 {% endif %}
-<a href="/newest_reviews/{{n}}">Next Page</a>
+<a href="{{ url_for('new_reviews', page=page+1) }}">Next Page</a>
 <br>
-<a href="/">Back</a>
+<a href="{{ url_for('home') }}">Back</a>
 {% endblock %}
