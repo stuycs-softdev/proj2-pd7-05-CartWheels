@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block body %}
+<h1>Newest Carts</h1>
+<h3>Page {{page}}</h3>
+
+{% for c in carts %}
+<h3><a href="{{ url_for('cart_page', cid=c.get_id()) }}">{{c.owner}}</a></h3>
+<h5>Zip Code: {{c.zip_code}}</h5>
+<h5>Address: {{c.address}} {{c.street}}</h5>
+<br>
+<hr>
+{% endfor %}
+
+<br>
+{% if page > 1 %}
+<a href="{{ url_for('new_carts', page=page-1) }}">Previous Page</a>
+{% endif %}
+<a href="{{ url_for('new_carts', page=page+1) }}">Next Page</a>
+<br>
+<a href="{{ url_for('home') }}">Back</a>
+{% endblock %}

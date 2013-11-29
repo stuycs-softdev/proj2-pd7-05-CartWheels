@@ -31,7 +31,7 @@
     </div>
   </fieldset>
 </form>
-<h6>Don't have an account? <a href="register">Register here</a></h6>
+<h6>Don't have an account? <a href="{{ url_for('register') }}">Register here</a></h6>
 <br>
-<a href="/">Back</a>
+<a href="{{ url_for('home') }}">Back</a>
 {% endblock %}

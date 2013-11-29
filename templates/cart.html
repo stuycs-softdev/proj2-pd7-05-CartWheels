@@ -19,18 +19,17 @@
 </span>
 <br>
 <br>
-<hr>
 
 {% for r in target_cart.get_reviews() %}
+<hr>
+<br>
 <h3>{{r.rating}}</h3>
 <h4>{{r.user}}</h4>
 <p>{{r.text}}</p>
 <br>
-<hr>
 {% endfor %}
 
-{% if user %}
-{% if not user.get_reviews(cart_id=target_cart.get_id()) %}
+{% if user and not user.get_reviews(cart_id=target_cart.get_id()) %}
 <form method=POST action=#>
   {% for i in range(1,6) %}
   <input type=radio name=review_rating value={{i}}>
@@ -40,16 +39,17 @@
   <input type=text name=review_text placeholder="Review text">
   <input type=submit name=btn value=Submit>
 </form>
-{% endif %}
+<br>
 {% endif %}
 
 {% for img in target_cart.images %}
-<img src="/_image/{{img._id}}"> {{img.label}}
+<hr>
+<br>
+<img src="{{ url_for('serve_image', image_id=img._id) }}"> {{img.label}}
 <br>
 {% endfor %}
 <br>
 <br>
-<hr>
 
 {% if user %}
 <form method=POST action=# enctype="multipart/form-data">
@@ -60,6 +60,6 @@
 {% endif %}
 
 <br>
-<a href="/">Back</a>
+<a href={{ url_for('home') }}>Back</a>
 
 {% endblock %}
