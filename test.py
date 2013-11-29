@@ -15,8 +15,3 @@ r = c.add_review(u.username, text='Great place to chow down!', rating=4.5)
 t = tags.insert(label='chow')
 
 t.attach(c.get_id())
-
-#users.remove_all()
-#revs.remove_all()
-#tags.remove_all()
-#renames.remove_all()

@@ -3,10 +3,20 @@
 
 <h1>{{target_cart.owner}}</h1>
 <h3>Zip Code: {{target_cart.zip_code}}</h3>
-<h3>Address: {{target_cart.address}}</h3>
+<h3>Address: {{target_cart.address}} {{target_cart.street}}</h3>
+
+<span>
 {% for t in target_cart.tags %}
-<span>{{t}} | </span>
+{{t.label}} |
 {% endfor %}
+
+{% if user %}
+<form method=POST action=#>
+  <input type=text name=tag_label placeholder="New tag">
+  <input type=submit name=btn value=Tag>
+</form>
+{% endif %}
+</span>
 <br>
 <br>
 <hr>
@@ -27,9 +37,26 @@
     {{i}}
   </input>
   {% endfor %}
-  <input type=text name=review_text value=text>
+  <input type=text name=review_text placeholder="Review text">
+  <input type=submit name=btn value=Submit>
 </form>
 {% endif %}
+{% endif %}
+
+{% for img in target_cart.images %}
+<img src="/_image/{{img._id}}"> {{img.label}}
+<br>
+{% endfor %}
+<br>
+<br>
+<hr>
+
+{% if user %}
+<form method=POST action=# enctype="multipart/form-data">
+  <input type=file name=file value="Choose image">
+  <input type=text name=img_label placeholder="Image label">
+  <input type=submit name=btn value=Upload>
+</form>
 {% endif %}
 
 {% endblock %}
