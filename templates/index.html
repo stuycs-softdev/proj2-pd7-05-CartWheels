@@ -2,46 +2,95 @@
 {% block head %}
 
 <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.3.0/pure-min.css">
-<link rel="stylesheet" type=text/css href="{{ url_for('static', filename='css/maps.css') }}">
 
 <script type=text/javascript
   src="{{ url_for('static', filename='js/cart-map.js') }}"></script>
+
+<style>
+  #map-canvas {
+    width: 710px;
+    height: 600px;
+    position: relative;
+  }
+  .map-widget {
+    margin-top: 20px;
+    margin-left: 20px;
+  }
+  .map-form {
+    margin-top: 20px;
+    margin-left: 20px;
+  }
+  .pure-button-small {
+    font-size: 85%;
+  }
+  .pure-button-nav {
+  }
+  .search-results {
+    margin-bottom: 5px;
+    padding: 5px;
+  }
+  .hidden {
+    display: none;
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+  a:hover {
+    color: inherit;
+  }
+</style>
 {% endblock %}
 
 {% block body %}
-<div class=map-form>
-  <select class=styled-select align=center id="key">
-    <option value=zip_code>Zip Code</option>
-    <option value=street>Street</option>
-    <option value=borough>Borough</option>
-    <option value=owner>Name</option>
-  </select>
+<form class="map-form pure-form">
+  <fieldset>
+    <label for=key>Search by</label>
+    <select class=styled-select id="key">
+      <option value=zip_code>Zip Code</option>
+      <option value=street>Street</option>
+      <option value=borough>Borough</option>
+      <option value=owner>Name</option>
+    </select>
 
-  <input class=val align=center type=text id="val">
+    <input class=val type=text id="val" placeholder="Enter a search term">
+
+    <button type="submit" class="pure-button pure-button-small">Search</button>
+  </fieldset>
+</form>
+
+<div class="pure-g map-widget">
+  <div class="pure-u-1-2">
+    <div id="map-canvas"></div>
+  </div>
+
+  <div class="pure-u-1-2">
+
+    <ul class="pure-menu pure-menu-open pure-menu-horizontal">
+      <li><a class=pure-button-nav href=# id=carts>Top Carts</a></li>
+      <li><a class=pure-button-nav href=# id=revs>Latest Reviews</a></li>
+    </ul>
+
+    <div class="search-results" id=cart-results>
+      {% for recommendation in recommendations %}
+      <br>
+      <a href="{{url_for('cart_page', cid=recommendation.get_id())}}">{{recommendation.owner}}</a>
+      <p>{{recommendation.rating}} stars</p>
+      <br>
+      {% endfor %}
+    </div>
+
+    <div class="search-results hidden" id=rev-results>
+      {% for review in reviews %}
+      <br>
+      <a href="{{url_for('cart_page', cid=review.cart_id)}}">{{review.user}}:</a>
+      <p>({{review.rating}})</p>
+      <p>{{review.text}}</p>
+      <br>
+      {% endfor %}
+    </div>
+  </div>
 </div>
 
-<div id="map-canvas"></div>
 
-<br><br><br>
-<a href="{{ url_for('recommendations', page=1) }}">Recommended Carts</a>
-
-<ul>
-{% for recommendation in recommendations %}
-<li><a href="{{url_for('cart_page', cid=recommendation.get_id())}}">{{recommendation.name}} owned by {{recommendation.owner}}</a></li>
-{% endfor %}
-</ul>
-
-<br><br>
-<a href="{{ url_for('new_reviews', page=1) }}">Newest Reviews</a>
-<ul>
-{% for review in reviews %}
-<li><a href="{{url_for('cart_page', cid=review.cart_id)}}">{{review.user}}; ({{review.rating}}) {{review.text}}</a></li>
-{% endfor %}
-
-{% for cart in carts %}
-<li><a href="{{url_for('cart_page', cid=cart.get_id())}}">{{cart.name}} owned by {{cart.owner}}</a></li>
-{% endfor %}
-</ul>
-
-<br><br>
 {% endblock %}
