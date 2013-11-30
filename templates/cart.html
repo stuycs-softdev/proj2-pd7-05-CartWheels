@@ -1,8 +1,6 @@
 {% extends "layout.html" %}
 {% block body %}
 
-<a href="{{url_for('add_carts')}}">Add a cart</a>
-
 {% if target_cart.name %}
 <h1>{{target_cart.name}}
 {% endif %}

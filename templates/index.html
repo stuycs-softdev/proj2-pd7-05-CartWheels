@@ -24,24 +24,24 @@
 
 <br><br><br>
 <a href="{{ url_for('recommendations', page=1) }}">Recommended Carts</a>
+
 <ul>
 {% for recommendation in recommendations %}
 <li><a href="{{url_for('cart_page', cid=recommendation.get_id())}}">{{recommendation.name}} owned by {{recommendation.owner}}</a></li>
 {% endfor %}
 </ul>
+
 <br><br>
 <a href="{{ url_for('new_reviews', page=1) }}">Newest Reviews</a>
 <ul>
 {% for review in reviews %}
 <li><a href="{{url_for('cart_page', cid=review.cart_id)}}">{{review.user}}; ({{review.rating}}) {{review.text}}</a></li>
 {% endfor %}
-</ul>
-<br><br>
-<a href="{{ url_for('new_carts', page=1) }}">Newest Carts</a>
-<ul>
+
 {% for cart in carts %}
 <li><a href="{{url_for('cart_page', cid=cart.get_id())}}">{{cart.name}} owned by {{cart.owner}}</a></li>
 {% endfor %}
 </ul>
+
 <br><br>
 {% endblock %}
