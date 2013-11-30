@@ -1,22 +1,25 @@
 {% extends "layout.html" %}
 {% block body %}
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.3.0/pure-min.css">
+<br>
+<form method="POST" class="pure-form">
 
-<h1>Add a Cart</h1>
-
-{% if message %}
-{{message}}
-{% endif %}
-
-<form method="POST">
-<input type="text" name="name" placeholder="Cart Name"><br>
-<input type="text" name="owner" placeholder="Cart Owner" required="required"><br>
-<input type="text" name="address" placeholder="Address" required="required"><br>
-<input type="text" name="street" placeholder="Street" required="required"><br>
-<input type="text" name="borough" placeholder="City" required="required"><br>
-<input type="text" name="zip" placeholder="Zip Code" required="required"><br>
-<input type="text" name="lat" placeholder="Latitude" required="required"><br>
-<input type="text" name="lng" placeholder="Longitude" required="required"><br>
-<input type="submit" name="button" value="Add">
+  <fieldset class="pure-group">
+    <legend>Add a Cart</legend>
+    {% if message %}
+    {{message}}
+    {% endif %}
+    <input type="text" class="pure-input-1-4" name="name" placeholder="Cart Name">
+    <input type="text" class="pure-input-1-4" name="owner" placeholder="Cart Owner" required="required">
+    <input type="text" class="pure-input-1-4" name="address" placeholder="Address" required="required">
+    <input type="text" class="pure-input-1-4" name="street" placeholder="Street" required="required">
+    <input type="text" class="pure-input-1-4" name="borough" placeholder="City" required="required">
+    <input type="text" class="pure-input-1-4" name="zip" placeholder="Zip Code" required="required">
+    <input type="text" class="pure-input-1-4" name="lat" placeholder="Latitude" required="required">
+    <input type="text" class="pure-input-1-4" name="lng" placeholder="Longitude" required="required">
+  </fieldset>
+  <br>
+  <button type="submit" value="Add" class="pure-button pure-button-primary">Submit</button>
 </form>
 
 {% endblock %}
