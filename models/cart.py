@@ -39,6 +39,9 @@ class CartModel(Model):
     # Adds a review under the users page
     def add_review(self, user, **kwargs):
         reviews = Review()
+        ratings = [r.rating for r in self.get_reviews()]
+        self.rating = sum(ratings) / len(ratings)
+        self.save()
         return reviews.insert(cart_id=self.get_id(), user=user, **kwargs)
 
     # Get blog reviews made by this user, and with other arguments
@@ -53,7 +56,7 @@ class Cart(Collection):
         super(Cart, self).__init__(CartModel)
 
     def insert(self, **kwargs):
-        return super(Cart, self).insert(tags=[], images=[], **kwargs)
+        return super(Cart, self).insert(tags=[], images=[], rating=-1, **kwargs)
 
     # Get by tag function
     def get_by_tag(self, label):

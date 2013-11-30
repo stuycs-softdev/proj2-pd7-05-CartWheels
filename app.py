@@ -125,30 +125,6 @@ def cart_page(cid):
         return render_template('cart.html', target_cart=c, user=u)
     return render_template('cart.html', target_cart=c, user=None)
 
-# Add Carts
-@app.route('/add/carts',methods=['GET', 'POST'])
-def add_carts():
-    if request.method == 'POST':
-        if carts.insert(name=request.form['name'],
-            owner=request.form['owner'],
-            address=request.form['address'],
-            street=request.form['street'],
-            borough=request.form['borough'],
-            zip_code=request.form['zip'],
-            lat=request.form['lat'],
-            lng=request.form['lng']):
-            return render_template('addCarts.html',message="Successfully added cart.")
-        return render_template('addCarts.html',message="Could not add cart.")
-    return render_template('addCarts.html')
-
-# Carts ordered by date
-@app.route('/newest-carts/<int:page>')
-def new_carts(page):
-	c = carts.get_by_date()
-	start = (page - 1) * 20
-	end = page * 20
-	return render_template("carts.html", carts=c[start:end], page=page)
-
 
 # Reviews ordered by date
 @app.route('/newest-reviews/<int:page>')
@@ -156,15 +132,22 @@ def new_reviews(page):
     r = reviews.get_by_date()
     start = (page - 1) * 20
     end = page * 20
-    return render_template('reviews.html', reviews=r[start:end], page=page)
+    if 'username' in session:
+        u = users.find_one(username=session['username'])
+        return render_template('reviews.html', reviews=r[start:end], page=page, user=u)
+    return render_template('reviews.html', reviews=r[start:end], page=page, user=None)
 
 # Carts ordered by rating
 @app.route('/top-carts/<int:page>')
 def recommendations(page):
-    recs = carts.sort_by([('rating',-1)])
+    recs = carts.sort_by([('rating', -1)])
     start = (page - 1) * 20
     end = page * 20
-    return render_template("recommendations.html", recommendations=recs[start:end], page=page)
+    if 'username' in session:
+        u = users.find_one(username=session['username'])
+        return render_template("recommendations.html", recommendations=recs[start:end], page=page, user=u)
+    return render_template("recommendations.html", recommendations=recs[start:end], page=page, user=None)
+
 
 # Serves the data from the backend to the frontend js using json module
 @app.route('/_data')
