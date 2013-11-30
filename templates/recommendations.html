@@ -4,9 +4,9 @@
 <h3>Page {{page}}</h3>
 
 {% for rec in recommendations %}
-<h3><a href="{{ url_for('cart_page', cid=c.get_id()) }}">{{c.owner}}</a></h3>
-<h5>Zip Code: {{c.zip_code}}</h5>
-<h5>Address: {{c.address}} {{c.street}}</h5>
+<h3><a href="{{ url_for('cart_page', cid=rec.get_id()) }}">{{rec.owner}}</a></h3>
+<h5>Zip Code: {{rec.zip_code}}</h5>
+<h5>Address: {{rec.address}} {{rec.street}}</h5>
 <br>
 <hr>
 {% endfor %}

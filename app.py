@@ -125,6 +125,21 @@ def cart_page(cid):
         return render_template('cart.html', target_cart=c, user=u)
     return render_template('cart.html', target_cart=c, user=None)
 
+# Add Carts
+@app.route('/add/carts',methods=['GET', 'POST'])
+def add_carts():
+    if request.method == 'POST':
+        if carts.insert(name=request.form['name'],
+            owner=request.form['owner'],
+            address=request.form['address'],
+            street=request.form['street'],
+            borough=request.form['borough'],
+            zip_code=request.form['zip'],
+            lat=request.form['lat'],
+            lng=request.form['lng']):
+            return render_template('addCarts.html',message="Successfully added cart.")
+        return render_template('addCarts.html',message="Could not add cart.")
+    return render_template('addCarts.html')
 
 # Carts ordered by date
 @app.route('/newest-carts/<int:page>')
