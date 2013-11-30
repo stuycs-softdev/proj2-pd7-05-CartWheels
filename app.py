@@ -132,8 +132,10 @@ def new_reviews(page):
     r = reviews.get_by_date()
     start = (page - 1) * 20
     end = page * 20
-    return render_template('reviews.html', reviews=r[start:end], page=page)
-
+    if 'username' in session:
+        u = users.find_one(username=session['username'])
+        return render_template('reviews.html', reviews=r[start:end], page=page, user=u)
+    return render_template('reviews.html', reviews=r[start:end], page=page, user=None)
 
 # Carts ordered by rating
 @app.route('/top-carts/<int:page>')
@@ -141,7 +143,10 @@ def recommendations(page):
     recs = carts.sort_by([('rating', -1)])
     start = (page - 1) * 20
     end = page * 20
-    return render_template("recommendations.html", recommendations=recs[start:end], page=page)
+    if 'username' in session:
+        u = users.find_one(username=session['username'])
+        return render_template("recommendations.html", recommendations=recs[start:end], page=page, user=u)
+    return render_template("recommendations.html", recommendations=recs[start:end], page=page, user=None)
 
 
 # Serves the data from the backend to the frontend js using json module
