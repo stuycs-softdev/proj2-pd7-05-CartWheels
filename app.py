@@ -23,13 +23,14 @@ f.close()
 def home():
     r = reviews.get_by_date()
     c = carts.get_by_date()
+    recs = carts.sort_by([('rating',-1)])
     if not 'username' in session:
         return render_template('index.html', user=None, reviews=r[:5],
-                carts=c[:5], API_KEY=api_key)
+                carts=c[:5], recommendations=recs[:5],API_KEY=api_key)
     else:
         user = users.find_one(username=session['username'])
-	return render_template('index.html',user=user, reviews=r[:5],
-                carts=c[:5], API_KEY=api_key)
+	return render_template('index.html', user=user, reviews=r[:5],
+                carts=c[:5], recommendations=recs[:5],API_KEY=api_key)
 
 
 # Register
@@ -124,6 +125,21 @@ def cart_page(cid):
         return render_template('cart.html', target_cart=c, user=u)
     return render_template('cart.html', target_cart=c, user=None)
 
+# Add Carts
+@app.route('/add/carts',methods=['GET', 'POST'])
+def add_carts():
+    if request.method == 'POST':
+        if carts.insert(name=request.form['name'],
+            owner=request.form['owner'],
+            address=request.form['address'],
+            street=request.form['street'],
+            borough=request.form['borough'],
+            zip_code=request.form['zip'],
+            lat=request.form['lat'],
+            lng=request.form['lng']):
+            return render_template('addCarts.html',message="Successfully added cart.")
+        return render_template('addCarts.html',message="Could not add cart.")
+    return render_template('addCarts.html')
 
 # Carts ordered by date
 @app.route('/newest-carts/<int:page>')
@@ -142,6 +158,13 @@ def new_reviews(page):
     end = page * 20
     return render_template('reviews.html', reviews=r[start:end], page=page)
 
+# Carts ordered by rating
+@app.route('/top-carts/<int:page>')
+def recommendations(page):
+    recs = carts.sort_by([('rating',-1)])
+    start = (page - 1) * 20
+    end = page * 20
+    return render_template("recommendations.html", recommendations=recs[start:end], page=page)
 
 # Serves the data from the backend to the frontend js using json module
 @app.route('/_data')

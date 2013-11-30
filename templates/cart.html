@@ -1,7 +1,12 @@
 {% extends "layout.html" %}
 {% block body %}
 
-<h1>{{target_cart.owner}}</h1>
+<a href="{{url_for('add_carts')}}">Add a cart</a>
+
+{% if target_cart.name %}
+<h1>{{target_cart.name}}
+{% endif %}
+owned by{{target_cart.owner}}</h1>
 <h3>Zip Code: {{target_cart.zip_code}}</h3>
 <h3>Address: {{target_cart.address}} {{target_cart.street}}</h3>
 
@@ -23,8 +28,7 @@
 {% for r in target_cart.get_reviews() %}
 <hr>
 <br>
-<h3>{{r.rating}}</h3>
-<h4>{{r.user}}</h4>
+<h4>{{r.user}} gave a {{r.rating}}</h4>
 <p>{{r.text}}</p>
 <br>
 {% endfor %}

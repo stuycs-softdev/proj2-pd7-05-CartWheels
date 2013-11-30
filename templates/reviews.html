@@ -4,8 +4,7 @@
 <h3>Page {{page}}</h3>
 
 {% for r in reviews %}
-<h3>{{r.rating}}</h3>
-<h4>{{r.user}}</h4>
+<h4>{{r.user}} gave a <a href="{{url_for('cart_page',cid=r.cart_id)}}">{{r.rating}}</a></h4>
 <p>{{r.text}}</p>
 <br>
 <hr>
