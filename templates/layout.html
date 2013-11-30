@@ -27,21 +27,23 @@
     {% block head %} {% endblock %}
   </head>
   <body>
+<br>
     <div class="pure-menu pure-menu-open pure-menu-horizontal">
       <a href="{{ url_for('home') }}" class="pure-menu-heading">CartWheels</a>
-
       <ul>
-        <li class="pure-menu-selected"><a href="{{ url_for('home') }}">Home</a></li>
+        <li><a href="{{ url_for('home') }}">Home</a></li>
         {% if not user %}
         <li><a href="{{ url_for('register') }}">Register</a></li>
         <li><a href="{{ url_for('login') }}">Login</a></li>
         {% else %}
         <li><a href="{{ url_for('logout') }}">Logout</a></li>
         <li><a href="{{ url_for('changeinfo') }}">Account Settings</a></li>
+	<li><a href="{{url_for('add_carts')}}">Add a cart</a></li>
         {% endif %}
       </ul>
     </div>
     {% block body %} 
     {% endblock %}
   </body>
+
 </html>
