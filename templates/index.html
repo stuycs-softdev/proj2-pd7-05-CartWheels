@@ -7,26 +7,15 @@
   src="{{ url_for('static', filename='js/cart-map.js') }}"></script>
 
 <style>
-  body {
-    background: #6940FF;
-  }
-  .container {
-    background: #FFFFFF;
-    width: 1400px;
-    height: 690px;
-    margin-right: auto;
-    margin-left: auto;
-    margin-top: 15px;
-    border: 2px solid #222222;
-  }
   #map-canvas {
-    width: 697px;
+    width: 700px;
     height: 603px;
     margin-top: 15px;
     margin-left: 1px;
     position: relative;
   }
   .map-form {
+    width: 40%;
     margin-top: 20px;
     margin-left: 20px;
     border-bottom: 1px solid #DBDBDB;
@@ -35,26 +24,24 @@
     font-size: 85%;
   }
   .pure-menu.pure-menu-open.pure-nav {
-    background: #FC8686;
     border-radius: 2px;
     width: 660px;
     height: 34px;
     font-size: 15px;
-    font-weight: 900;
+    border-bottom: 1px solid #DBDBDB;
   }
   .pure-nav a {
-    color: black;
+    color: #FF3333;
   }
   .pure-menu.pure-nav a:hover {
-    background: linear-gradient(#FC8686, #F75E5E);
+    color: #FF3333;
   }
   .search-results {
-    background: #F5F5F5;
+    background: #FFFFFF;
     margin-top: -15px;
     margin-bottom: 5px;
     margin-left: -5px;
     margin-right: -5px;
-    width: 60%;
     padding: 10px;
     height: 545px;
     overflow: scroll;
@@ -82,34 +69,34 @@
 {% endblock %}
 
 {% block body %}
-<div class=container>
-  <form class="map-form pure-form">
-    <fieldset>
-      <label for=key>Search by</label>
-      <select class=styled-select name=key id="key">
-        <option value=zip_code>Zip Code</option>
-        <option value=street>Street</option>
-        <option value=borough>Borough</option>
-        <option value=owner>Name</option>
-      </select>
+<form class="map-form pure-form">
+  <fieldset>
+    <label for=key>Search by</label>
+    <select class=styled-select name=key id="key">
+      <option value=zip_code>Zip Code</option>
+      <option value=street>Street</option>
+      <option value=borough>Borough</option>
+      <option value=owner>Name</option>
+    </select>
 
-      <input class=val type=text name=val id="val" placeholder="Enter a search term">
+    <input class=val type=text name=val id="val" placeholder="Enter a search term">
 
-      <button type="submit" class="pure-button pure-button-small">Search</button>
-    </fieldset>
-  </form>
+    <button type="submit" class="pure-button pure-button-small">Search</button>
+  </fieldset>
+</form>
 
-  <div class="pure-g">
-    <div class="pure-u-1-2">
-      <div id="map-canvas"></div>
-    </div>
+<div class="pure-g">
+  <div class="pure-u-1-2">
+    <div id="map-canvas"></div>
+  </div>
 
-    <div class="pure-u-1-2">
-      <ul class="pure-menu pure-menu-open pure-menu-horizontal pure-nav">
-        <li><a href=# id=carts>Top Carts</a></li>
-        <li><a href=# id=revs>Latest Reviews</a></li>
-      </ul>
+  <div class="pure-u-1-2">
+    <ul class="pure-menu pure-menu-open pure-menu-horizontal pure-nav">
+      <li><a href=# id=carts>Top Carts</a></li>
+      <li><a href=# id=revs>Latest Reviews</a></li>
+    </ul>
 
+    <div class="pure-u-3-5">
       <div class="search-results" id=cart-results>
         {% for recommendation in recommendations %}
         <div class=search-item>
