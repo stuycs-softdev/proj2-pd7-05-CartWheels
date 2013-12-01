@@ -7,27 +7,66 @@
   src="{{ url_for('static', filename='js/cart-map.js') }}"></script>
 
 <style>
-  #map-canvas {
-    width: 710px;
-    height: 600px;
-    position: relative;
+  body {
+    background: #6940FF;
   }
-  .map-widget {
-    margin-top: 20px;
-    margin-left: 20px;
+  .container {
+    background: #FFFFFF;
+    width: 1400px;
+    height: 690px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 15px;
+    border: 2px solid #222222;
+  }
+  #map-canvas {
+    width: 697px;
+    height: 603px;
+    margin-top: 15px;
+    margin-left: 1px;
+    position: relative;
   }
   .map-form {
     margin-top: 20px;
     margin-left: 20px;
+    border-bottom: 1px solid #DBDBDB;
   }
   .pure-button-small {
     font-size: 85%;
   }
-  .pure-button-nav {
+  .pure-menu.pure-menu-open.pure-nav {
+    background: #FC8686;
+    border-radius: 2px;
+    width: 660px;
+    height: 34px;
+    font-size: 15px;
+    font-weight: 900;
+  }
+  .pure-nav a {
+    color: black;
+  }
+  .pure-menu.pure-nav a:hover {
+    background: linear-gradient(#FC8686, #F75E5E);
   }
   .search-results {
+    background: #F5F5F5;
+    margin-top: -15px;
     margin-bottom: 5px;
-    padding: 5px;
+    margin-left: -5px;
+    margin-right: -5px;
+    width: 60%;
+    padding: 10px;
+    height: 545px;
+    overflow: scroll;
+  }
+  .search-item {
+    padding-top: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    border-bottom: 1px solid #DBDBDB;
+  }
+  .search-item:hover {
+    background: #DEDEDE;
   }
   .hidden {
     display: none;
@@ -43,54 +82,54 @@
 {% endblock %}
 
 {% block body %}
-<form class="map-form pure-form">
-  <fieldset>
-    <label for=key>Search by</label>
-    <select class=styled-select id="key">
-      <option value=zip_code>Zip Code</option>
-      <option value=street>Street</option>
-      <option value=borough>Borough</option>
-      <option value=owner>Name</option>
-    </select>
+<div class=container>
+  <form class="map-form pure-form">
+    <fieldset>
+      <label for=key>Search by</label>
+      <select class=styled-select name=key id="key">
+        <option value=zip_code>Zip Code</option>
+        <option value=street>Street</option>
+        <option value=borough>Borough</option>
+        <option value=owner>Name</option>
+      </select>
 
-    <input class=val type=text id="val" placeholder="Enter a search term">
+      <input class=val type=text name=val id="val" placeholder="Enter a search term">
 
-    <button type="submit" class="pure-button pure-button-small">Search</button>
-  </fieldset>
-</form>
+      <button type="submit" class="pure-button pure-button-small">Search</button>
+    </fieldset>
+  </form>
 
-<div class="pure-g map-widget">
-  <div class="pure-u-1-2">
-    <div id="map-canvas"></div>
-  </div>
-
-  <div class="pure-u-1-2">
-
-    <ul class="pure-menu pure-menu-open pure-menu-horizontal">
-      <li><a class=pure-button-nav href=# id=carts>Top Carts</a></li>
-      <li><a class=pure-button-nav href=# id=revs>Latest Reviews</a></li>
-    </ul>
-
-    <div class="search-results" id=cart-results>
-      {% for recommendation in recommendations %}
-      <br>
-      <a href="{{url_for('cart_page', cid=recommendation.get_id())}}">{{recommendation.owner}}</a>
-      <p>{{recommendation.rating}} stars</p>
-      <br>
-      {% endfor %}
+  <div class="pure-g">
+    <div class="pure-u-1-2">
+      <div id="map-canvas"></div>
     </div>
 
-    <div class="search-results hidden" id=rev-results>
-      {% for review in reviews %}
-      <br>
-      <a href="{{url_for('cart_page', cid=review.cart_id)}}">{{review.user}}:</a>
-      <p>({{review.rating}})</p>
-      <p>{{review.text}}</p>
-      <br>
-      {% endfor %}
+    <div class="pure-u-1-2">
+      <ul class="pure-menu pure-menu-open pure-menu-horizontal pure-nav">
+        <li><a href=# id=carts>Top Carts</a></li>
+        <li><a href=# id=revs>Latest Reviews</a></li>
+      </ul>
+
+      <div class="search-results" id=cart-results>
+        {% for recommendation in recommendations %}
+        <div class=search-item>
+          <a href="{{url_for('cart_page', cid=recommendation.get_id())}}">{{recommendation.owner}}</a>
+          <p>{{recommendation.rating}} stars</p>
+        </div>
+        {% endfor %}
+      </div>
+
+      <div class="search-results hidden" id=rev-results>
+        {% for review in reviews %}
+        <div class=search-item>
+          <a href="{{url_for('cart_page', cid=review.cart_id)}}">{{review.user}}:</a>
+          <p>({{review.rating}})</p>
+          <p>{{review.text}}</p>
+        </div>
+        {% endfor %}
+      </div>
     </div>
   </div>
 </div>
-
 
 {% endblock %}
