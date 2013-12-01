@@ -42,18 +42,15 @@
 </style>
 {% endblock %}
 
-{% block body %}
-<form class="map-form pure-form">
-  <fieldset>
-    <label for=key>Search by</label>
-    <select class=styled-select id="key">
-      <option value=zip_code>Zip Code</option>
-      <option value=street>Street</option>
-      <option value=borough>Borough</option>
-      <option value=owner>Name</option>
-    </select>
+<body>
+  
+  <div class="pure-u-1" id="main">
 
-    <input class=val type=text id="val" placeholder="Enter a search term">
+  <div class="header">
+    
+    <h1>CartWheels</h1>
+    
+    <h2> Mapping NYC's Food Carts </h2>
 
     <button type="submit" class="pure-button pure-button-small">Search</button>
   </fieldset>
@@ -64,7 +61,14 @@
     <div id="map-canvas"></div>
   </div>
 
-  <div class="pure-u-1-2">
+  {% block body %}
+  <div class=map-form>
+    <select class=styled-select align=center id="key">
+      <option value=zip_code>Zip Code</option>
+      <option value=street>Street</option>
+      <option value=borough>Borough</option>
+      <option value=owner>Name</option>
+    </select>
 
     <ul class="pure-menu pure-menu-open pure-menu-horizontal">
       <li><a class=pure-button-nav href=# id=carts>Top Carts</a></li>
@@ -92,5 +96,9 @@
   </div>
 </div>
 
-
+<div id="map-canvas"></div>
 {% endblock %}
+
+</body>
+</html>
+
