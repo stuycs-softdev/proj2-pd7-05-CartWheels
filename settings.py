@@ -4,10 +4,16 @@ STORE_FILE = "store.info"
 
 # Mongodb
 DB_NAME = 'cartwheels'
-USER_COLLECTION = 'users'
-CART_COLLECTION = 'carts'
-TAG_COLLECTION = 'tags'
-REVIEW_COLLECTION = 'reviews'
+COLLECTIONS = {
+        'User': 'users',
+        'Cart': 'carts',
+        'Tag': 'tags',
+        'Review': 'reviews',
+        'Rename': 'rename',
+        'Collection': 'ignore'
+        }
+
+IGNORE_ATTRS = ['_obj', 'collection', 'fs', 'db']
 
 # Elasticsearch
 ES_REPEAT = 5

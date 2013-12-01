@@ -1,0 +1,79 @@
+{% extends "layout.html" %}
+{% block body %}
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.3.0/pure-min.css">
+
+<body>
+  <div class="pure-g">
+    <div class="pure-u-1-2">
+      {% if target_cart.name %}
+      <h1>{{target_cart.name}}
+	{% endif %}
+	owned by {{target_cart.owner}}</h1>
+    </div>
+    <div class="pure-u-1-2">
+      <h3>Zip Code: {{target_cart.zip_code}}</h3>
+      <h3>Address: {{target_cart.address}} {{target_cart.street}}</h3>
+    </div>
+  </div>
+</body>
+
+{% if user %}
+<form method=POST action=# class="pure-form">
+  <legend>Tags</legend>
+  <input type="text" name="tag_label" placeholder="New tag">
+  <button type="submit" name="btn" value="Tag" class="pure-button pure-button-primary">Submit</button>
+</form>
+{% endif %}
+<br>
+<span>
+  {% for t in target_cart.tags %}
+  <font color=blue>{{t.label}}</font> |
+  {% endfor %}
+</span>
+<br>
+<br>
+{% for r in target_cart.get_reviews() %}
+<hr>
+<h4>{{r.user}} gave a {{r.rating}}</h4>
+<p>{{r.text}}</p>
+<br>
+{% endfor %}
+
+{% if user and not user.get_reviews(cart_id=target_cart.get_id()) %}
+<form method=POST action=# class="pure-form">
+  <legend>Rating & Review</legend>
+  {% for i in range(1,6) %}
+  <input type=radio name=review_rating value={{i}}>
+  {{i}}
+  </input>
+  {% endfor %}
+  <br>
+  <input type=text name=review_text placeholder="Review text">
+  <button type="submit" name="btn" value="Submit" class="pure-button pure-button-primary">Submit</button>
+</form>
+<br>
+{% endif %}
+
+  
+{% for img in target_cart.images %}
+<hr>
+<br>
+<img src="{{ url_for('serve_image', image_id=img._id) }}"> {{img.label}}
+<br>
+{% endfor %}
+<br>
+  
+
+{% if user %}
+<form method=POST action=# enctype="multipart/form-data" class="pure-form">
+  <legend>Upload Image</legend>  
+  <input type=file name=file value="Choose image">
+  <input type=text name=img_label placeholder="Image label">
+  <button type="submit" name="btn" value="Upload" class="pure-button pure-button-primary">Upload</button>
+</form>
+{% endif %}
+
+<br>
+<a href={{ url_for('home') }}>Back</a>
+
+{% endblock %}

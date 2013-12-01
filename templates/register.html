@@ -1,21 +1,39 @@
-<h1>Register!</h1>
+{% extends "layout.html" %}
+{% block body %}
 
-<form method="POST">
-<b>Please create a username.</b>
-<br>
-Username: <input type="text" name="username"> <font color=red><sub>{{usererror}}</sub></font>
-<br>
-<br>
-<b>Please create a password.</b>
-<br>
-Password: <input type="password" name="password"> 
-<br>
-Verify Password: <input type="password" name="confirm"> <font color=red><sub>{{passerror}}</sub></font>
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.3.0/pure-min.css">
+<center>
+{% if error %}
+<font color=red>{{error}}</font>
+{% endif %}
 <br>
 <br>
-<input type="submit" name="button" value="Register">
-<input type="submit" name="button" value="Cancel">
-
+<form method="POST" class="pure-form pure-form-aligned">
+  <fieldset>
+    <legend>Register</legend>
+    <h4>Please create a username and password.</h4>
+    <div class="pure-control-group">
+      <label for="user">Username</label>
+      <input id="user" type="text" name="username" required="required">
+    </div>
+    
+    <div class="pure-control-group">
+      <label for="pw">Password</label>
+      <input id="pw" type="password" name="password" required="required">
+    </div>
+    
+    <div class="pure-control-group">
+      <label for="pw2">Verify Password</label>
+      <input id="pw2" type="password" name="confirm" required="required">
+    </div>
+    
+    <div class="pure-controls">
+      <button type="submit" name="button" class="pure-button pure-button-primary" value="Register">Register</button>
+      <button type="reset" name="button" class="pure-button" value="Cancel">Cancel</button>
+    </div>
+  </fieldset>
 </form>
-<br>
-<sub>Already have an account? <a href="login.html">Login here!<a></sub>
+<h6>Already have an account? <a href="{{ url_for('login') }}">Login here</a></h6>
+
+{% endblock %}
+</center>

@@ -1,13 +1,17 @@
 #!/usr/local/bin/python
 from flask import Flask, render_template, session, redirect, request, url_for
-from models import Cart
+from bson import ObjectId
+from models import Collection, Cart, User, Review
 from settings import SECRET_KEY, STORE_FILE
 import json
 
 
 app = Flask(__name__)
 app.secret_key = SECRET_KEY
+models = Collection()
 carts = Cart()
+users = User()
+reviews = Review()
 
 f = open(STORE_FILE)
 api_key = f.readlines()[0].strip()
@@ -15,101 +19,166 @@ f.close()
 
 
 # Base function, renders the template with the api key as input
-"""Map for the home function for the GET method:
-    I. Check if the username is in session
-        1) If it is...
-            i. grab the user from the database
-                - u = users.find_one(username=session['username'])
-            ii. render the template, and pass the user as an argument
-                - render_template("index.html", ..., user=u)
-        2) If it isn't
-            i. render the template as normal
-                - render_template("index.html", ...)
-TODO: render the template with a list of trending food carts, or reviews"""
-@app.route("/")
+@app.route('/')
 def home():
-    return render_template('index.html', API_KEY=api_key)
+    tab = request.args.get('tab', None)
+    if tab is None:
+        tab = 'carts'
+    r = reviews.get_by_date()
+    c = carts.get_by_date()
+    recs = carts.sort_by([('rating',-1)])
+    if not 'username' in session:
+        return render_template('index.html', user=None, reviews=r[:5],
+                carts=c[:5], recommendations=recs[:5], tab=tab, API_KEY=api_key)
+    else:
+        user = users.find_one(username=session['username'])
+	return render_template('index.html', user=user, reviews=r[:5],
+                carts=c[:5], recommendations=recs[:5], tab=tab, API_KEY=api_key)
 
 
-# User page
-"""Map for the user function for the GET method:
-    I. Grab the user from the database
-        - target_user = users.find_one(_id=uid)
-    II. Check if a user exists (use if target_user is not None) with the given id
-        1) If it does...
-            i. Check if the username is in session
-                - if it is...
-                    * grab the user from the database
-                        - u = users.find_one(username=session['username'])
-                    * render the template with the user and the target_user to the function 
-                        - render_template("index.html", ..., target_user=target_user, u=u)
-                - if it isn't
-                    * render the template with the target_user
-                        - render_template("index.html", ..., target_user=target_user, u=None)
-TODO: Implement POST method"""
-@app.route("/users/<id>")
-def user(uid):
-    pass
+# Register
+@app.route('/register',methods=['GET','POST'])
+def register():
+    if 'username' in session:
+        return redirect(url_for('home'))
+    if request.method == 'GET':
+        return render_template('register.html')
+    if users.exists(request.form['username']):
+        return render_template('register.html', error='Username already exists')
+    if request.form['password'] != request.form['confirm']:
+        return render_template('register.html', error='Passwords do not match')
+    session['username'] = request.form['username']
+    users.insert(username=request.form['username'],
+            password=request.form['password'])
+    return redirect(url_for('home'))
+
+
+# Login
+@app.route('/login',methods=['GET','POST'])
+def login():
+    if 'username' in session:
+        return redirect(url_for('home'))
+    if request.method == 'GET':
+        return render_template('login.html')
+    u = users.find_one(username=request.form['username'],
+            password=request.form['password'])
+    if not u:
+        return render_template('login.html',
+                error='Incorrect username or password')
+    session['username'] = request.form['username']
+    return redirect(url_for('home'))
+
+
+# Logout
+@app.route('/logout')
+def logout():
+    if 'username' in session:
+        session.pop('username')
+    return redirect(url_for('home'))
+
+
+# For the user to change personal information
+@app.route('/changeinfo', methods=['GET', 'POST'])
+def changeinfo():
+    if 'username' not in session:
+        return redirect(url_for('home'))
+    if request.method == 'GET':
+        return render_template('changeinfo.html',user=session['username'])
+    u = users.find_one(username=session['username'])
+    error = None
+    usererror = None
+    passerror = None
+    usersuccess = None
+    pwsuccess = None
+    if u.password == request.form['oldpw']:
+        if request.form['newuser']:
+            if not u.change_username(request.form['oldpw'],
+                    request.form['newuser']):
+                usererror = 'Username change unsuccessful.'
+            else:
+                session['username'] = request.form['newuser']
+                usersuccess = 'Username successfully changed to: ' + request.form['newuser']
+        if request.form['newpw']:
+            if not u.change_password(request.form['oldpw'], request.form['newpw'],
+                    request.form['confirm']):
+                passerror= 'Passwords do not match.'
+	    else:
+	        pwsuccess= 'Password successfully changed.'
+    else:
+        error = 'Incorrect password'
+    return render_template('changeinfo.html', user=session['username'],error=error, usererror=usererror, passerror=passerror, usersuccess=usersuccess, pwsuccess=pwsuccess)
 
 
 # Cart page
-"""Map for the cart function for the GET method:
-    I. Grab the cart from the database
-        - target_cart = carts.find_one(_id=cid)
-    II. Check if a cart exists (use if target_cart is not None) with the given id
-        1) If it does...
-            i. Check if the username is in session
-                - if it is...
-                    * grab the user from the database
-                        - u = users.find_one(username=session['username'])
-                    * render the template with the user and the cart to the function 
-                        - render_template("index.html", ..., target_cart=target_cart, u=u)
-                - if it isn't
-                    * render the template with the target_cart
-                        - render_template("index.html", ..., target_cart=target_cart, u=None)
-TODO: Implement POST method"""
-@app.route("/carts/<cid>")
-def cart(cid):
-    pass
+@app.route('/carts/<string:cid>', methods=['GET', 'POST'])
+def cart_page(cid):
+    c = carts.find_one(_id=ObjectId(cid))
+    if 'username' in session:
+        u = users.find_one(username=session['username'])
+        if request.method == 'POST':
+            if request.form['btn'] == 'Submit':
+                rating = int(request.form['review_rating'])
+                text = request.form['review_text']
+                c.add_review(user=u.username, text=text, rating=rating)
+            elif request.form['btn'] == 'Upload':
+                f = request.files['file']
+                c.add_image(f, request.form['img_label'])
+            else:
+                c.add_tag(request.form['tag_label'])
+        return render_template('cart.html', target_cart=c, user=u)
+    return render_template('cart.html', target_cart=c, user=None)
 
 
-# Tag page
-"""Map for the tag function
-    I. Grab the tag from the database
-        - tag = tags.find_one(label=label)
-    II. Check if the tag exists (use if target is not None)
-        i. Check if the username is in session
-            - if it is...
-                * grab the user from the database
-                    - u = users.find_one(username=session['username'])
-                * render the template with the user and the tag passed to the function 
-                    - render_template("index.html", ..., tag=tag, u=u)
-            - if it isn't
-                * render the template with the tag
-                    - render_template("index.html", ..., tag=tag, u=None)
-TODO: Implement POST method"""
-@app.route("/carts/<label>")
-def tag(label):
-    pass
+# Reviews ordered by date
+@app.route('/newest-reviews/<int:page>')
+def new_reviews(page):
+    r = reviews.get_by_date()
+    start = (page - 1) * 20
+    end = page * 20
+    if 'username' in session:
+        u = users.find_one(username=session['username'])
+        return render_template('reviews.html', reviews=r[start:end], page=page, user=u)
+    return render_template('reviews.html', reviews=r[start:end], page=page, user=None)
+
+# Carts ordered by rating
+@app.route('/top-carts/<int:page>')
+def recommendations(page):
+    recs = carts.sort_by([('rating', -1)])
+    start = (page - 1) * 20
+    end = page * 20
+    if 'username' in session:
+        u = users.find_one(username=session['username'])
+        return render_template("recommendations.html", recommendations=recs[start:end], page=page, user=u)
+    return render_template("recommendations.html", recommendations=recs[start:end], page=page, user=None)
 
 
 # Serves the data from the backend to the frontend js using json module
 @app.route('/_data')
 def serve_data():
+    # Get iterable copy of args
     rargs = request.args.copy()
     kwargs = {}
+    # Copy request args into a copy
     for k in rargs.keys():
         kwargs[k] = rargs[k]
-
     objs = carts.find(**kwargs)
     results = [o._obj for o in objs]
-
+    # Remove incompatible types
     for r in results:
         r.pop('date', None)
         r['_id'] = str(r['_id'])
-
+    # Return results as an array
     data = {'results': results}
     return json.dumps(data)
+
+
+# Get image by id
+@app.route('/_image/<image_id>')
+def serve_image(image_id):
+    image = models.fs.get(ObjectId(image_id))
+    data = image.read()
+    image.close()
+    return data
 
 
 if __name__ == '__main__':

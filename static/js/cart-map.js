@@ -50,7 +50,7 @@ $(function () {
                     var contentString = '<div id="content">' +
                         '<div id="siteNotice">' +
                         '</div>' +
-                        '<p>' + value.owner + '</p>' +
+                        '<a href=/carts/' + value._id + ' >' + value.owner + '</p>' +
                         '</div>';
 
                     var infowindow = new google.maps.InfoWindow({
@@ -73,11 +73,22 @@ $(function () {
     };
 
     //Call main function on enter
-    $('input[type=text]').bind('keydown', function (e) {
-        if (e.keyCode === 13) {
-            var key = $("#key").val(),
-                val = $("#val").val();
-            submit_form(e, key, val.toUpperCase());
-        }
+    $('.pure-form').submit(function (e) {
+        event.preventDefault();
+        var key = $("#key").val(),
+            val = $("#val").val();
+        submit_form(e, key, val.toUpperCase());
+    });
+
+    $('#carts').click(function (e) {
+        event.preventDefault();
+        $('div#cart-results').removeClass('hidden');
+        $('div#rev-results').addClass('hidden');
+    });
+
+    $('#revs').click(function (e) {
+        event.preventDefault();
+        $('div#cart-results').addClass('hidden');
+        $('div#rev-results').removeClass('hidden');
     });
 });

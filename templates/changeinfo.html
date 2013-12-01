@@ -1,24 +1,49 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.3.0/pure-min.css">
+
 <h1>Account Settings</h1>
+<h3>Hello {{user}}.</h3>
 
-<form method="POST">
-<h3>Please enter your current password to make any changes.</h3>
-Current password: <input type="password" name="oldpw"> 
-{% if error is defined %}
-<font color=red><sub>{{error}}</sub></font>
-{% endif %}
-<br>
-<br>
-<h3>Make your changes:</h3>
+<form method="POST" class="pure-form">
 
-Change username to: <input type="text" name="newuser"> <font color=red><sub>{{usererror}}</sub></font>
-<br>
-<input type="submit" name="button" value="Change Username">
-<br>
-<br>
-Change password to: <input type="password" name="newpw"> 
-<br>
-Verify new password: <input type="password" name="confirm"> <font color=red><sub>{{passerror}}</sub></font>
-<br>
-<input type="submit" name="button" value="Change Password">
+  <fieldset class="pure-group">
+    <legend>Please enter your current password to make any changes.</legend>
+    {% if error %}
+    <font color=red>{{error}}</font>
+    {% endif %}
+    <input id="pw" type="password" name="oldpw" placeholder="Current password" required="required"> 
+  </fieldset>
+  
+  <h2>Make your changes</h2>
+  
+  <fieldset class="pure-group">
+    <legend>Change username</legend>
+    {% if usererror %}
+    <font color=red>{{usererror}}</font>
+    {% endif %}
+    {% if usersuccess %}
+    <font color=green>{{usersuccess}}</font>
+    {% endif %}
+    <input type="text" class="pure-input-1-4" placeholder="New username" name="newuser"> 	
+  </fieldset>
+
+  <fieldset class="pure-group">
+    <legend>Change password</legend>
+    {% if passerror %}
+    <font color=red>{{passerror}}</font>
+    {% endif %}
+    {% if pwsuccess %}
+    <font color=green>{{pwsuccess}}</font>
+    {% endif %}
+    <input type="password" class="pure-input-1-4" placeholder="New password" name="newpw">
+    <input type="password" class="pure-input-1-4" placeholder="Verify Password" name="confirm"> 
+  </fieldset>
+
+  <br>
+  <button type="submit" class="pure-button pure-button-primary">Submit</button>
 
 </form>
+
+{% endblock %}

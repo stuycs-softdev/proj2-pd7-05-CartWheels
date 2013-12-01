@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block body %}
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.3.0/pure-min.css">
+<h1>Recommended Carts</h1>
+<h3>Page {{page}}</h3>
+
+{% for rec in recommendations %}
+<h3><a href="{{ url_for('cart_page', cid=rec.get_id()) }}">{{rec.owner}}</a></h3>
+<h5>Zip Code: {{rec.zip_code}}</h5>
+<h5>Address: {{rec.address}} {{rec.street}}</h5>
+<br>
+<hr>
+{% endfor %}
+
+<br>
+{% if page > 1 %}
+<a href="{{ url_for('recommendations', page=page-1) }}">Previous Page</a>
+{% endif %}
+<a href="{{ url_for('recommendations', page=page+1) }}">Next Page</a>
+<br>
+{% endblock %}

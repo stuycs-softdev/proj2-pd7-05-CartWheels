@@ -1,24 +1,32 @@
-<h1>Login!</h1>
+{% extends "layout.html" %}
+{% block body %}
+
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.3.0/pure-min.css">
+<center>
+<br>
 {% if error is defined %}
-<font color=red><sub>{{error}}</sub></font>
+<font color=red>{{error}}</font>
 {% endif %}
 <br>
-<form method="POST">
-<b>Username</b>
-<br>
-<input type="text" name="username">
-<br>
-<br>
-<b>Password</b>
-<br>
-<input type="password" name="password">
-<br>
-<br>
-<input type="submit" name="button" value="Sign in">
+<form method="POST" class="pure-form pure-form-aligned">
+  <fieldset>
+    <legend>Login</legend>
 
+    <div class="pure-control-group">
+      <label for="user">Username</label>
+      <input id="user" type="text" name="username" placeholder="Username" required="required">
+    </div>
+
+    <div class="pure-control-group">
+      <label for="pw">Password</label>
+      <input id="user" type="password" name="password" placeholder="Password" required="required">
+    </div>
+    
+    <div class="pure-controls">
+      <button type="submit" class="pure-button pure-button-primary">Sign in</button>
+    </div>
+  </fieldset>
 </form>
-<br>
-<sub>Don't have an account? <a href="register.html">Register here!</a></sub>
-
-
-
+<h6>Don't have an account? <a href="{{ url_for('register') }}">Register here</a></h6>
+{% endblock %}
+</center>

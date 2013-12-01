@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block body %}
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.3.0/pure-min.css">
+
+<h1>Newest Reviews</h1>
+<h3>Page {{page}}</h3>
+
+{% for r in reviews %}
+<h4>{{r.user}} gave a <a href="{{url_for('cart_page',cid=r.cart_id)}}">{{r.rating}}</a></h4>
+<p>{{r.text}}</p>
+<br>
+<hr>
+{% endfor %}
+
+<br>
+{% if page > 1 %}
+<a href="{{ url_for('new_reviews', page=page-1) }}">Previous Page</a>
+{% endif %}
+<a href="{{ url_for('new_reviews', page=page+1) }}">Next Page</a>
+<br>
+<a href="{{ url_for('home') }}">Back</a>
+{% endblock %}

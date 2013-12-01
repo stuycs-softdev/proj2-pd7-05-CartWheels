@@ -3,8 +3,13 @@
   <head>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
 
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.3.0/pure-min.css">
+
     <script type=text/javascript
-      src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+      src="{{ url_for('static', filename='include/jquery.min.js') }}"></script>
+
+    <script type=text/javascript
+      src="{{ url_for('static', filename='include/d3.v3.min.js') }}"></script>
 
     <script type="text/javascript"
       src="https://maps.googleapis.com/maps/api/js?key={{API_KEY}}&sensor=false">
@@ -14,9 +19,30 @@
       var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
     </script>
 
+    <style>
+      html {
+        font-family: "proxima-nova", sans-serif;
+      }
+    </style>
     {% block head %} {% endblock %}
   </head>
   <body>
-    {% block body %} {% endblock %}
+<br>
+    <div class="pure-menu pure-menu-open pure-menu-horizontal">
+      <a href="{{ url_for('home') }}" class="pure-menu-heading">CartWheels</a>
+      <ul>
+        <li><a href="{{ url_for('home') }}">Home</a></li>
+        {% if not user %}
+        <li><a href="{{ url_for('register') }}">Register</a></li>
+        <li><a href="{{ url_for('login') }}">Login</a></li>
+        {% else %}
+        <li><a href="{{ url_for('logout') }}">Logout</a></li>
+        <li><a href="{{ url_for('changeinfo') }}">Account Settings</a></li>
+        {% endif %}
+      </ul>
+    </div>
+    {% block body %} 
+    {% endblock %}
   </body>
+
 </html>
