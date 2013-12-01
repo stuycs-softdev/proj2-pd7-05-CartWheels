@@ -21,19 +21,22 @@ f.close()
 # Base function, renders the template with the api key as input
 @app.route('/')
 def home():
-    tab = request.args.get('tab', None)
-    if tab is None:
-        tab = 'carts'
     r = reviews.get_by_date()
     c = carts.get_by_date()
-    recs = carts.sort_by([('rating',-1)])
+    recs = carts.sort_by([('rating', -1)])
+    if request.method == 'POST':
+        key = request.form['key']
+        val = request.form['val']
+        kwargs = {}
+        kwargs[key] = val
+        recs = carts.sort_by([('rating', -1)], **kwargs)
     if not 'username' in session:
-        return render_template('index.html', user=None, reviews=r[:5],
-                carts=c[:5], recommendations=recs[:5], tab=tab, API_KEY=api_key)
+        return render_template('index.html', user=None, reviews=r,
+                carts=c, recommendations=recs, API_KEY=api_key)
     else:
         user = users.find_one(username=session['username'])
-	return render_template('index.html', user=user, reviews=r[:5],
-                carts=c[:5], recommendations=recs[:5], tab=tab, API_KEY=api_key)
+	return render_template('index.html', user=user, reviews=r,
+                carts=c, recommendations=recs, API_KEY=api_key)
 
 
 # Register
@@ -165,7 +168,7 @@ def serve_data():
     results = [o._obj for o in objs]
     # Remove incompatible types
     for r in results:
-        r.pop('date', None)
+        r['date'] = r['date'].strftime('%A, %B %d')
         r['_id'] = str(r['_id'])
     # Return results as an array
     data = {'results': results}

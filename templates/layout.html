@@ -20,15 +20,42 @@
     </script>
 
     <style>
+      @font-face {font-family: "Helvetica Neue"; src: url('../static/include/fonts/HelveticaNeue.ttf') format('truetype');}
       html {
-        font-family: "proxima-nova", sans-serif;
+        height: 100%;
+      }
+      body {
+        background: #333333;
+        font-family: "proxima-nova", "Helvitica Neue", Helvetica-Neue, HelveticaNeue, Arial, sans-serif;
+        height: 100%;
+      }
+      .pure-menu.pure-menu-open.pure-main-nav {
+        background: inherit;
+        width 100%;
+        height: 36px;
+        font-weight: 900;
+      }
+      .pure-menu.pure-main-nav a {
+        color: #999999;
+      }
+      .pure-menu.pure-main-nav a:hover {
+        background: #444444;
+      }
+      .container {
+        background: #FFFFFF;
+        width: 1400px;
+        height: 690px;
+        margin-right: auto;
+        margin-left: auto;
+        margin-top: 15px;
+        border: 2px solid #222222;
       }
     </style>
     {% block head %} {% endblock %}
   </head>
   <body>
 <br>
-    <div class="pure-menu pure-menu-open pure-menu-horizontal">
+    <div class="pure-menu pure-menu-open pure-menu-horizontal pure-main-nav">
       <a href="{{ url_for('home') }}" class="pure-menu-heading">CartWheels</a>
       <ul>
         <li><a href="{{ url_for('home') }}">Home</a></li>
@@ -41,8 +68,11 @@
         {% endif %}
       </ul>
     </div>
+
+    <div class=container>
     {% block body %} 
     {% endblock %}
+    </div>
   </body>
 
 </html>
