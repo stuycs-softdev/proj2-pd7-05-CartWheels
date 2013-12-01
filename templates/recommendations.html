@@ -1,8 +1,45 @@
 {% extends "layout.html" %}
 {% block body %}
 <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.3.0/pure-min.css">
-<h1>Recommended Carts</h1>
-<h3>Page {{page}}</h3>
+<style>
+  #map-canvas {
+    width: 710px;
+    height: 600px;
+    position: relative;
+  }
+  .map-widget {
+    margin-top: 20px;
+    margin-left: 20px;
+  }
+  .map-form {
+    margin-top: 20px;
+    margin-left: 20px;
+  }
+  .pure-button-small {
+    font-size: 85%;
+  }
+  .pure-button-nav {
+  }
+  .search-results {
+    margin-bottom: 5px;
+    padding: 5px;
+  }
+  .hidden {
+    display: none;
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+  a:hover {
+    color: inherit;
+  }
+</style>
+
+<div class="pure-u-1 header">
+<h1 style="color:#727272">Recommended Carts</h1>
+<h3 style="color:#727272">Page {{page}}</h3>
+</div>
 
 {% for rec in recommendations %}
 <h3><a href="{{ url_for('cart_page', cid=rec.get_id()) }}">{{rec.owner}}</a></h3>
@@ -13,9 +50,17 @@
 {% endfor %}
 
 <br>
-{% if page > 1 %}
-<a href="{{ url_for('recommendations', page=page-1) }}">Previous Page</a>
-{% endif %}
-<a href="{{ url_for('recommendations', page=page+1) }}">Next Page</a>
-<br>
+
+<div class="pure-g pure-u-1-3">
+  <div class="pure-menu pure-menu-open">
+    <a href="{{ url_for('home') }}" class="pure-menu-heading" width=100>CartWheels</a>
+    <ul>
+      <li><a href="{{ url_for('recommendations', page=page-1) }}">Previous Page</a>
+      </li>
+      <li><a href="{{ url_for('recommendations', page=page+1) }}">Next Page</a>
+      </li>
+    </ul>
+  </div>
+</div>
+  <br>
 {% endblock %}
