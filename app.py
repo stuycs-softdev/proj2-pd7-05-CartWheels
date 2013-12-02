@@ -184,11 +184,12 @@ def serve_data():
         r['date'] = r['date'].strftime('%A, %B %d')
         r['_id'] = str(r['_id'])
         for image in r['images']:
-            image['date'] = image['date_added'].strftime('%A, %B %d')
+            image['date_added'] = image['date_added'].strftime('%A, %B %d')
             image['_id'] = str(image['_id'])
         for tag in r['tags']:
             tag['date'] = tag['date'].strftime('%A, %B %d')
             tag['_id'] = str(tag['_id'])
+        print r
     # Return results as an array
     data = {'results': results}
     return json.dumps(data)
