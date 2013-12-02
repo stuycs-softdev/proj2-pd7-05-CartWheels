@@ -23,6 +23,10 @@
   .pure-button-small {
     font-size: 85%;
   }
+  .pure-button-xsmall {
+    background: orange;
+    font-size: 65%;
+  }
   .pure-menu.pure-menu-open.pure-nav {
     border-radius: 2px;
     width: 660px;
@@ -43,6 +47,7 @@
     margin-left: -5px;
     margin-right: -5px;
     padding: 10px;
+    width: 95%;
     height: 545px;
     overflow: scroll;
   }
@@ -54,6 +59,13 @@
   }
   .search-item:hover {
     background: #DEDEDE;
+  }
+  .pure-u-2-5.tags{
+    line-height: 15px;
+    display: inline-block;
+  }
+  .tags a {
+    margin-top: 2px;
   }
   .hidden {
     display: none;
@@ -96,25 +108,28 @@
       <li><a href=# id=revs>Latest Reviews</a></li>
     </ul>
 
-    <div class="pure-u-3-5">
-      <div class="search-results" id=cart-results>
-        {% for recommendation in recommendations %}
-        <div class=search-item>
-          <a href="{{url_for('cart_page', cid=recommendation.get_id())}}">{{recommendation.owner}}</a>
-          <p>{{recommendation.rating}} stars</p>
-        </div>
+    <div class="search-results" id=cart-results>
+      {% for recommendation in recommendations %}
+      <div class="search-item pure-u-1-2">
+        <a href="{{url_for('cart_page', cid=recommendation.get_id())}}">{{recommendation.owner}}</a>
+        <p>{{recommendation.rating}} stars</p>
+      </div>
+      <div class="pure-u-2-5 tags">
+        {% for t in recommendation.tags %}
+        <a href="{{ url_for('search') }}?tag={{t.label}}" class="pure-button pure-button-xsmall">{{t.label}}</a>
         {% endfor %}
       </div>
+      {% endfor %}
+    </div>
 
-      <div class="search-results hidden" id=rev-results>
-        {% for review in reviews %}
-        <div class=search-item>
-          <a href="{{url_for('cart_page', cid=review.cart_id)}}">{{review.user}}:</a>
-          <p>({{review.rating}})</p>
-          <p>{{review.text}}</p>
-        </div>
-        {% endfor %}
+    <div class="search-results hidden" id=rev-results>
+      {% for review in reviews %}
+      <div class="search-item pure-u-3-5">
+        <a href="{{url_for('cart_page', cid=review.cart_id)}}">{{review.user}}:</a>
+        <p>({{review.rating}})</p>
+        <p>{{review.text}}</p>
       </div>
+      {% endfor %}
     </div>
   </div>
 </div>
