@@ -22,7 +22,7 @@ f.close()
 @app.route('/')
 def home():
     r = reviews.get_by_date()
-    recs = carts.sort_by([('rating', -1)])
+    recs = carts.sort_by([('rating', -1), ('date', -1)])
     if request.method == 'POST':
         key = request.form['key']
         val = request.form['val']
@@ -145,7 +145,7 @@ def new_reviews(page):
 # Carts ordered by rating
 @app.route('/top-carts/<int:page>')
 def recommendations(page):
-    recs = carts.sort_by([('rating', -1)])
+    recs = carts.sort_by([('rating', -1), ('date', -1)])
     start = (page - 1) * 20
     end = page * 20
     if 'username' in session:
@@ -154,9 +154,17 @@ def recommendations(page):
     return render_template("recommendations.html", recommendations=recs[start:end], page=page, user=None)
 
 
-@app.route('/search')
-def search():
-    pass
+@app.route('/search/<int:page>')
+def search(page):
+    t = request.args.get('tag')
+    results = carts.get_by_tag(t)
+    start = (page - 1) * 20
+    end = page * 20
+    if 'username' in session:
+        u = users.find_one(username=session['username'])
+        return render_template('search.html', carts=results[start:end], page=page, t=t, u=u)
+    return render_template('search.html', carts=results[start:end], page=page, t=t, u=None)
+
 
 
 # Serves the data from the backend to the frontend js using json module

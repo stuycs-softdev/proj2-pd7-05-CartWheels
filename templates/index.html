@@ -116,7 +116,7 @@
       </div>
       <div class="pure-u-2-5 tags">
         {% for t in recommendation.tags %}
-        <a href="{{ url_for('search') }}?tag={{t.label}}" class="pure-button pure-button-xsmall">{{t.label}}</a>
+        <a href="{{ url_for('search', page=1) }}?tag={{t.label}}" class="pure-button pure-button-xsmall">{{t.label}}</a>
         {% endfor %}
       </div>
       {% endfor %}
