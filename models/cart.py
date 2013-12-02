@@ -61,5 +61,5 @@ class Cart(Collection):
 
     # Get by tag function
     def get_by_tag(self, label):
-        self.to_objects(self.objects.find({}, {'tags': {'$elemMatch':
-            {'label': label}}}))
+        return self.to_objects(self.objects.find({'tags': {'$elemMatch':
+            {'label': label}}}).sort([('rating', -1), ('date', -1)]))

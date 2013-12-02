@@ -18,17 +18,20 @@
     width: 40%;
     margin-top: 20px;
     margin-left: 20px;
-    border-bottom: 1px solid #DBDBDB;
   }
   .pure-button-small {
     font-size: 85%;
   }
+  .pure-button-xsmall {
+    background: orange;
+    font-size: 65%;
+  }
   .pure-menu.pure-menu-open.pure-nav {
     border-radius: 2px;
+    border-bottom: 1px solid #999999;
     width: 660px;
     height: 34px;
     font-size: 15px;
-    border-bottom: 1px solid #DBDBDB;
   }
   .pure-nav a {
     color: #FF3333;
@@ -43,6 +46,7 @@
     margin-left: -5px;
     margin-right: -5px;
     padding: 10px;
+    width: 95%;
     height: 545px;
     overflow: scroll;
   }
@@ -50,13 +54,18 @@
     padding-top: 10px;
     padding-left: 15px;
     padding-right: 15px;
-    border-bottom: 1px solid #DBDBDB;
+    border-right: 1px solid #999999;
+    line-height: 200%;
   }
   .search-item:hover {
     background: #DEDEDE;
   }
-  .hidden {
-    display: none;
+  .pure-u-2-5.tags{
+    line-height: 15px;
+    display: inline-block;
+  }
+  .tags a {
+    margin-top: 2px;
   }
   a {
     color: inherit;
@@ -69,7 +78,7 @@
 {% endblock %}
 
 {% block body %}
-<form class="map-form pure-form">
+<form class="map-form underline pure-form">
   <fieldset>
     <label for=key>Search by</label>
     <select class=styled-select name=key id="key">
@@ -96,25 +105,32 @@
       <li><a href=# id=revs>Latest Reviews</a></li>
     </ul>
 
-    <div class="pure-u-3-5">
-      <div class="search-results" id=cart-results>
-        {% for recommendation in recommendations %}
-        <div class=search-item>
-          <a href="{{url_for('cart_page', cid=recommendation.get_id())}}">{{recommendation.owner}}</a>
-          <p>{{recommendation.rating}} stars</p>
-        </div>
+    <div class="search-results" id=cart-results>
+      {% for rec in recommendations %}
+      <div class="search-item underline pure-u-1-2">
+        <a href="{{url_for('cart_page', cid=rec.get_id())}}">{{rec.owner}}</a>
+        <br>
+        <b>{{rec.address}} {{rec.street}}</b>
+        <br>
+        <div class="rateit" data-rateit-value="{{rec.rating}}" data-rateit-ispreset="true" data-rateit-readonly="true" data-rateit-min="0" data-rateit-max="5"></div>
+        <br>
+      </div>
+      <div class="pure-u-2-5 tags">
+        {% for t in rec.tags %}
+        <a href="{{ url_for('search', page=1) }}?tag={{t.label}}" class="pure-button pure-button-xsmall">{{t.label}}</a>
         {% endfor %}
       </div>
+      {% endfor %}
+    </div>
 
-      <div class="search-results hidden" id=rev-results>
-        {% for review in reviews %}
-        <div class=search-item>
-          <a href="{{url_for('cart_page', cid=review.cart_id)}}">{{review.user}}:</a>
-          <p>({{review.rating}})</p>
-          <p>{{review.text}}</p>
-        </div>
-        {% endfor %}
+    <div class="search-results hidden" id=rev-results>
+      {% for rev in reviews %}
+      <div class="search-item pure-u-3-5">
+        <a href="{{url_for('cart_page', cid=rev.cart_id)}}">{{rev.user}}</a>
+        <div>{{rev.text}}</div>
+        <div class="rateit" data-rateit-value="{{rev.rating}}" data-rateit-ispreset="true" data-rateit-readonly="true" data-rateit-min="0" data-rateit-max="5"></div>
       </div>
+      {% endfor %}
     </div>
   </div>
 </div>
