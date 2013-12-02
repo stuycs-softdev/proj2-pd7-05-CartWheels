@@ -16,6 +16,9 @@ Cartwheels
 ### Tags and photos
 - Users will be able to give certain tags to food carts, and attribute certain photos to them as well
 
+## Running
+* running [here](http://softdev-server.stuycs.org:7007/)
+
 ## Task delegation
 - **Noah** -- website design and web pages
 - **Vivian** -- middleware (app.py)
@@ -25,4 +28,7 @@ Cartwheels
 ## Uses
 - NYC Open Data
 - Google Maps API
-- (Potentially) Yelp API
+
+## Future plans
+- Make the website look nicer
+- Improve current features and tracking
