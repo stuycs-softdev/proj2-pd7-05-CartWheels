@@ -189,7 +189,6 @@ def serve_data():
         for tag in r['tags']:
             tag['date'] = tag['date'].strftime('%A, %B %d')
             tag['_id'] = str(tag['_id'])
-        print r
     # Return results as an array
     data = {'results': results}
     return json.dumps(data)
