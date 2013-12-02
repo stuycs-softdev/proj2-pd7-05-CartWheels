@@ -32,12 +32,16 @@
     width: 660px;
     height: 34px;
     font-size: 15px;
+    padding-bottom: 5px;
   }
   .pure-nav a {
     color: #FF3333;
   }
   .pure-menu.pure-nav a:hover {
     color: #FF3333;
+  }
+  #search {
+    margin-left: 225px;
   }
   .search-results {
     background: #FFFFFF;
@@ -103,6 +107,13 @@
     <ul class="pure-menu pure-menu-open pure-menu-horizontal pure-nav">
       <li><a href=# id=carts>Top Carts</a></li>
       <li><a href=# id=revs>Latest Reviews</a></li>
+      <li>
+        <form action="{{ url_for('search', page=1) }}" method=GET id=search class="pure-form">
+          <fieldset>
+            <input type=text name=tag id=tag placeholder="Enter a tag">
+          </fieldset>
+        </form>
+      </li>
     </ul>
 
     <div class="search-results" id=cart-results>
@@ -125,7 +136,7 @@
 
     <div class="search-results hidden" id=rev-results>
       {% for rev in reviews %}
-      <div class="search-item pure-u-3-5">
+      <div class="search-item underline pure-u-3-5">
         <a href="{{url_for('cart_page', cid=rev.cart_id)}}">{{rev.user}}</a>
         <div>{{rev.text}}</div>
         <div class="rateit" data-rateit-value="{{rev.rating}}" data-rateit-ispreset="true" data-rateit-readonly="true" data-rateit-min="0" data-rateit-max="5"></div>

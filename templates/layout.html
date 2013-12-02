@@ -16,6 +16,9 @@
     <script type=text/javascript
       src="{{ url_for('static', filename='include/d3.v3.min.js') }}"></script>
 
+    <script type=text/javascript
+      src="{{ url_for('static', filename='js/dom-actions.js') }}"></script>
+
     <script type="text/javascript"
       src="https://maps.googleapis.com/maps/api/js?key={{API_KEY}}&sensor=false">
     </script>
@@ -65,7 +68,7 @@
     {% block head %} {% endblock %}
   </head>
   <body>
-<br>
+    <br>
     <div class="pure-menu pure-menu-open pure-menu-horizontal pure-main-nav">
       <a href="{{ url_for('home') }}" class="pure-menu-heading">CartWheels</a>
       <ul>
@@ -79,6 +82,7 @@
         {% endif %}
       </ul>
     </div>
+
 
     <div class=container>
     {% block body %} 
