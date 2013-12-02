@@ -81,9 +81,9 @@ class Collection(object):
         self.objects.remove(kwargs)
 
     # Return model objects forted by certain values
-    def sort_by(self, sort_vals):
-        return self.to_objects(self.objects.find({}).sort(sort_vals))
+    def sort_by(self, sort_vals, **kwargs):
+        return self.to_objects(self.objects.find(kwargs).sort(sort_vals))
 
     # Gets anything by date
-    def get_by_date(self):
-        return self.sort_by([('date', -1)])
+    def get_by_date(self, **kwargs):
+        return self.sort_by([('date', -1)], **kwargs)

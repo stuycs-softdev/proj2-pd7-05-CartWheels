@@ -3,10 +3,10 @@
 
 <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.3.0/pure-min.css">
 <center>
+<br>
 {% if error %}
 <font color=red>{{error}}</font>
 {% endif %}
-<br>
 <br>
 <form method="POST" class="pure-form pure-form-aligned">
   <fieldset>
@@ -33,7 +33,7 @@
     </div>
   </fieldset>
 </form>
-<h6>Already have an account? <a href="{{ url_for('login') }}">Login here</a></h6>
+<h5>Already have an account? <a href="{{ url_for('login') }}">Login here</a></h5>
 
 {% endblock %}
 </center>

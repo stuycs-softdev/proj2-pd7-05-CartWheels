@@ -2,28 +2,105 @@
 {% block head %}
 
 <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.3.0/pure-min.css">
+<<<<<<< HEAD
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/maps.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/pure-min.css') }}">
 <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.14.0/build/cssnormalize/cssnormalize-min.css">
+=======
+>>>>>>> 4dc4bd4468a487d016ef99381effe89290f82998
 
 <script type=text/javascript
   src="{{ url_for('static', filename='js/cart-map.js') }}"></script>
+
+<style>
+  #map-canvas {
+    width: 700px;
+    height: 603px;
+    margin-top: 15px;
+    margin-left: 1px;
+    position: relative;
+  }
+  .map-form {
+    width: 40%;
+    margin-top: 20px;
+    margin-left: 20px;
+  }
+  .pure-button-small {
+    font-size: 85%;
+  }
+  .pure-button-xsmall {
+    background: orange;
+    font-size: 65%;
+  }
+  .pure-menu.pure-menu-open.pure-nav {
+    border-radius: 2px;
+    border-bottom: 1px solid #999999;
+    width: 660px;
+    height: 34px;
+    font-size: 15px;
+    padding-bottom: 5px;
+  }
+  .pure-nav a {
+    color: #FF3333;
+  }
+  .pure-menu.pure-nav a:hover {
+    color: #FF3333;
+  }
+  #search {
+    margin-left: 225px;
+  }
+  .search-results {
+    background: #FFFFFF;
+    margin-top: -15px;
+    margin-bottom: 5px;
+    margin-left: -5px;
+    margin-right: -5px;
+    padding: 10px;
+    width: 95%;
+    height: 545px;
+    overflow: scroll;
+  }
+  .search-item {
+    padding-top: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    border-right: 1px solid #999999;
+    line-height: 200%;
+  }
+  .search-item:hover {
+    background: #DEDEDE;
+  }
+  .pure-u-2-5.tags{
+    line-height: 15px;
+    display: inline-block;
+  }
+  .tags a {
+    margin-top: 2px;
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+  a:hover {
+    color: inherit;
+  }
+</style>
 {% endblock %}
 
 {% block body %}
-<div class=map-form>
-  <select class=styled-select align=center id="key">
-    <option value=zip_code>Zip Code</option>
-    <option value=street>Street</option>
-    <option value=borough>Borough</option>
-    <option value=owner>Name</option>
-  </select>
+<form class="map-form underline pure-form">
+  <fieldset>
+    <label for=key>Search by</label>
+    <select class=styled-select name=key id="key">
+      <option value=zip_code>Zip Code</option>
+      <option value=street>Street</option>
+      <option value=borough>Borough</option>
+      <option value=owner>Name</option>
+    </select>
 
-  <input class=val align=center type=text id="val">
-</div>
+    <input class=val type=text name=val id="val" placeholder="Enter a search term">
 
-<div id="map-canvas"></div>
-
+<<<<<<< HEAD
 <br><br><br>
 
 <div class="content">
@@ -70,6 +147,60 @@
     <br>
     Software Development '13-'14
 </address>
+=======
+    <button type="submit" class="pure-button pure-button-small">Search</button>
+  </fieldset>
+</form>
+
+<div class="pure-g">
+  <div class="pure-u-1-2">
+    <div id="map-canvas"></div>
+  </div>
+
+  <div class="pure-u-1-2">
+    <ul class="pure-menu pure-menu-open pure-menu-horizontal pure-nav">
+      <li><a href=# id=carts>Top Carts</a></li>
+      <li><a href=# id=revs>Latest Reviews</a></li>
+      <li>
+        <form action="{{ url_for('search', page=1) }}" method=GET id=search class="pure-form">
+          <fieldset>
+            <input type=text name=tag id=tag placeholder="Enter a tag">
+          </fieldset>
+        </form>
+      </li>
+    </ul>
+
+    <div class="search-results" id=cart-results>
+      {% for rec in recommendations %}
+      <div class="search-item underline pure-u-1-2">
+        <a href="{{url_for('cart_page', cid=rec.get_id())}}">{{rec.owner}}</a>
+        <br>
+        <b>{{rec.address}} {{rec.street}}</b>
+        <br>
+        <div class="rateit" data-rateit-value="{{rec.rating}}" data-rateit-ispreset="true" data-rateit-readonly="true" data-rateit-min="0" data-rateit-max="5"></div>
+        <br>
+      </div>
+      <div class="pure-u-2-5 tags">
+        {% for t in rec.tags %}
+        <a href="{{ url_for('search', page=1) }}?tag={{t.label}}" class="pure-button pure-button-xsmall">{{t.label}}</a>
+        {% endfor %}
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="search-results hidden" id=rev-results>
+      {% for rev in reviews %}
+      <div class="search-item underline pure-u-3-5">
+	<a href="{{url_for('cart_page', cid=rev.cart_id)}}"><b>{{rev.user}}</b></a>       
+	<div>{{rev.text}}</div>
+        <div class="rateit" data-rateit-value="{{rev.rating}}" data-rateit-ispreset="true" data-rateit-readonly="true" data-rateit-min="0" data-rateit-max="5"></div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+>>>>>>> 4dc4bd4468a487d016ef99381effe89290f82998
 {% endblock %}
 
 

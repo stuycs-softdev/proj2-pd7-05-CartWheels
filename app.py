@@ -22,15 +22,21 @@ f.close()
 @app.route('/')
 def home():
     r = reviews.get_by_date()
-    c = carts.get_by_date()
-    recs = carts.sort_by([('rating',-1)])
+    recs = carts.sort_by([('rating', -1), ('date', -1)])
+    if request.method == 'POST':
+        key = request.form['key']
+        val = request.form['val']
+        kwargs = {}
+        kwargs[key] = val
+        recs = carts.sort_by([('rating', -1)], **kwargs)
     if not 'username' in session:
-        return render_template('index.html', user=None, reviews=r[:5],
-                carts=c[:5], recommendations=recs[:5],API_KEY=api_key)
+        return render_template('index.html', user=None, reviews=r,
+                               recommendations=recs[:20], API_KEY=api_key)
     else:
         user = users.find_one(username=session['username'])
-        return render_template('index.html', user=user, reviews=r[:5],
-                carts=c[:5], recommendations=recs[:5],API_KEY=api_key)
+        return render_template('index.html', user=user, reviews=r, 
+                               recommendations=recs[:20], API_KEY=api_key)
+
 
 
 # Register
@@ -140,13 +146,27 @@ def new_reviews(page):
 # Carts ordered by rating
 @app.route('/top-carts/<int:page>')
 def recommendations(page):
-    recs = carts.sort_by([('rating', -1)])
+    recs = carts.sort_by([('rating', -1), ('date', -1)])
     start = (page - 1) * 20
     end = page * 20
     if 'username' in session:
         u = users.find_one(username=session['username'])
         return render_template("recommendations.html", recommendations=recs[start:end], page=page, user=u)
     return render_template("recommendations.html", recommendations=recs[start:end], page=page, user=None)
+
+
+# Search by tag
+@app.route('/search/<int:page>')
+def search(page):
+    t = request.args.get('tag')
+    results = carts.get_by_tag(t)
+    start = (page - 1) * 20
+    end = page * 20
+    if 'username' in session:
+        u = users.find_one(username=session['username'])
+        return render_template('search.html', carts=results[start:end], page=page, t=t, u=u)
+    return render_template('search.html', carts=results[start:end], page=page, t=t, u=None)
+
 
 
 # Serves the data from the backend to the frontend js using json module
@@ -162,8 +182,14 @@ def serve_data():
     results = [o._obj for o in objs]
     # Remove incompatible types
     for r in results:
-        r.pop('date', None)
+        r['date'] = r['date'].strftime('%A, %B %d')
         r['_id'] = str(r['_id'])
+        for image in r['images']:
+            image['date'] = image['date_added'].strftime('%A, %B %d')
+            image['_id'] = str(image['_id'])
+        for tag in r['tags']:
+            tag['date'] = tag['date'].strftime('%A, %B %d')
+            tag['_id'] = str(tag['_id'])
     # Return results as an array
     data = {'results': results}
     return json.dumps(data)

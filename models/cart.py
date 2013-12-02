@@ -39,10 +39,11 @@ class CartModel(Model):
     # Adds a review under the users page
     def add_review(self, user, **kwargs):
         reviews = Review()
+        rev = reviews.insert(cart_id=self.get_id(), user=user, **kwargs)
         ratings = [r.rating for r in self.get_reviews()]
         self.rating = sum(ratings) / len(ratings)
         self.save()
-        return reviews.insert(cart_id=self.get_id(), user=user, **kwargs)
+        return rev
 
     # Get blog reviews made by this user, and with other arguments
     def get_reviews(self, **kwargs):
@@ -60,5 +61,5 @@ class Cart(Collection):
 
     # Get by tag function
     def get_by_tag(self, label):
-        self.to_objects(self.objects.find({}, {'tags': {'$elemMatch':
-            {'label': label}}}))
+        return self.to_objects(self.objects.find({'tags': {'$elemMatch':
+            {'label': label}}}).sort([('rating', -1), ('date', -1)]))

@@ -3,7 +3,7 @@ $(function () {
 
     //Google maps initialization
     var mapOptions = {
-        center: new google.maps.LatLng(-34.397, 150.644),
+        center: new google.maps.LatLng(40.786383, -73.822921),
         zoom: 11,
         mapTypeId: google.maps.MapTypeId.ROADMAP
     };
@@ -72,12 +72,10 @@ $(function () {
         return false;
     };
 
-    //Call main function on enter
-    $('input[type=text]').bind('keydown', function (e) {
-        if (e.keyCode === 13) {
-            var key = $("#key").val(),
-                val = $("#val").val();
-            submit_form(e, key, val.toUpperCase());
-        }
+    $('.map-form').submit(function (e) {
+        event.preventDefault();
+        var key = $("#key").val(),
+            val = $("#val").val();
+        submit_form(e, key, val.toUpperCase());
     });
 });
