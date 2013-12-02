@@ -154,6 +154,7 @@ def recommendations(page):
     return render_template("recommendations.html", recommendations=recs[start:end], page=page, user=None)
 
 
+# Search by tag
 @app.route('/search/<int:page>')
 def search(page):
     t = request.args.get('tag')
@@ -182,6 +183,12 @@ def serve_data():
     for r in results:
         r['date'] = r['date'].strftime('%A, %B %d')
         r['_id'] = str(r['_id'])
+        for image in r['images']:
+            image['date'] = image['date_added'].strftime('%A, %B %d')
+            image['_id'] = str(image['_id'])
+        for tag in r['tags']:
+            tag['date'] = tag['date'].strftime('%A, %B %d')
+            tag['_id'] = str(tag['_id'])
     # Return results as an array
     data = {'results': results}
     return json.dumps(data)

@@ -72,23 +72,10 @@ $(function () {
         return false;
     };
 
-    //Call main function on enter
-    $('.pure-form').submit(function (e) {
+    $('.map-form').submit(function (e) {
         event.preventDefault();
         var key = $("#key").val(),
             val = $("#val").val();
         submit_form(e, key, val.toUpperCase());
-    });
-
-    $('#carts').click(function (e) {
-        event.preventDefault();
-        $('div#cart-results').removeClass('hidden');
-        $('div#rev-results').addClass('hidden');
-    });
-
-    $('#revs').click(function (e) {
-        event.preventDefault();
-        $('div#cart-results').addClass('hidden');
-        $('div#rev-results').removeClass('hidden');
     });
 });
