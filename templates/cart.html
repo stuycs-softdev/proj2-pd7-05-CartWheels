@@ -55,7 +55,7 @@
     </div>
     <div class="pure-u-1">
       {% for t in target_cart.tags %}
-      <div class="pure-button pure-button-xsmall">{{t.label}}</div>
+      <a href="{{ url_for('search', page=1) }}?tag={{t.label}}" class="pure-button pure-button-xsmall">{{t.label}}</a>
       {% endfor %}
     </div>
 
@@ -79,7 +79,6 @@
         </div>
         {% endfor %}
 
-<<<<<<< HEAD
       </div>
       {% if user and not user.get_reviews(cart_id=target_cart.get_id()) %}
       <form method=POST action=# class="pure-form review-form">
@@ -119,62 +118,5 @@
 
   </div>
 </body>
-
-=======
-{% if user %}
-<form method=POST action=# class="pure-form">
-  <legend>Tags</legend>
-  <input type="text" name="tag_label" placeholder="New tag">
-  <button type="submit" name="btn" value="Tag" class="pure-button pure-button-primary">Submit</button>
-</form>
-{% endif %}
-<br>
-<span>
-  {% for t in target_cart.tags %}
-  <font color=blue>{{t.label}}</font> |
-  {% endfor %}
-</span>
-<br>
-{% for r in target_cart.get_reviews() %}
-<hr>
-<h4>{{r.user}} gave a {{r.rating}}</h4>
-<p>{{r.text}}</p>
-{% endfor %}
-<br>
-{% if user and not user.get_reviews(cart_id=target_cart.get_id()) %}
-<form method=POST action=# class="pure-form">
-  <legend>Rating & Review</legend>
-  {% for i in range(1,6) %}
-  <input type=radio name=review_rating value={{i}}>
-  {{i}}
-  </input>
-  {% endfor %}
-  <br>
-  <input type=text name=review_text placeholder="Review text">
-  <button type="submit" name="btn" value="Submit" class="pure-button pure-button-primary">Submit</button>
-</form>
-<br>
-{% endif %}
-
-
-{% for img in target_cart.images %}
-<hr>
-<img src="{{ url_for('serve_image', image_id=img._id) }}"> {{img.label}}
-<br>
-{% endfor %}
-<br>
-{% if user %}
-<form method=POST action=# enctype="multipart/form-data" class="pure-form">
-  <legend>Upload Image</legend>  
-  <input type=file name=file value="Choose image">
-  <input type=text name=img_label placeholder="Image label">
-  <button type="submit" name="btn" value="Upload" class="pure-button pure-button-primary">Upload</button>
-</form>
-{% endif %}
-
-</center>
-<br>
-<a href={{ url_for('home') }}>Back</a>
->>>>>>> dev
 
 {% endblock %}
