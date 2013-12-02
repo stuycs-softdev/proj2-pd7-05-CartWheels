@@ -1,17 +1,27 @@
 {% extends "layout.html" %}
+
+{% block head %}
+<style>
+  .container {
+    padding-left: 15px;
+    padding-bottom: 15px;
+    overflow: scroll;
+  }
+</style>
+{% endblock %}
+
 {% block body %}
 <h1>Search Results for {{t}}</h1>
 <h3>Page {{page}}</h3>
 
 {% for c in carts %}
 <h3><a href="{{ url_for('cart_page', cid=c.get_id()) }}">{{c.owner}}</a></h3>
-<h5>Zip Code: {{c.zip_code}}</h5>
-<h5>Address: {{c.address}} {{c.street}}</h5>
+<h5>{{c.zip_code}}</h5>
+<h5>{{c.address}} {{c.street}}</h5>
 <br>
 <hr>
 {% endfor %}
 
-<br>
 {% if page > 1 %}
 <a href="{{ url_for('search', page=page-1) }}?tag={{t}}">Previous Page</a>
 {% endif %}
