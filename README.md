@@ -17,7 +17,10 @@ Cartwheels
 - Users will be able to give certain tags to food carts, and attribute certain photos to them as well
 
 ## Running
-* running [here](http://softdev-server.stuycs.org:7007/)
+* start mongo with `mongod`
+* run `python load.py` from the root directory to load all the data
+* go to [http://localhost:5000](http://localhost:5000)
+* already running [here](http://softdev-server.stuycs.org:7007/)
 
 ## Task delegation
 - **Noah** -- website design and web pages
